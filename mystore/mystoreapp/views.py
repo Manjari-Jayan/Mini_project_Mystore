@@ -250,7 +250,7 @@ def registration(request):
             user = User.objects.create_user(username=email, first_name=fname, last_name=lname, email=email, password=password)
             UserProfile.objects.create(user=user, mobile=mobile, address=address, image=image)
             messages.success(request, "Registration Successful")
-            return redirect('/userlogin/')
+            return redirect('userlogin')
     return render(request, 'registration.html', locals())
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -275,7 +275,7 @@ def userlogin(request):
 
 
 def profile(request):
-    # data = UserProfile.objects.get(user=request.user)
+    data = UserProfile.objects.get(user=request.user)
     if request.method == "POST":
         fname = request.POST['fname']
         lname = request.POST['lname']
@@ -441,6 +441,7 @@ def admin_change_password(request):
 def admin_dashboard(request):
     user = UserProfile.objects.filter()
     category = Category.objects.filter()
+    subcategory = Subcategory.objects.filter()
     product = Product.objects.filter()
 
     return render(request, 'admin_dashboard.html', locals())
