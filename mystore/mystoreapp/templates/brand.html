@@ -30,33 +30,28 @@ View {{category.name}} Product</h4>
               <div class="row w-100 mx-auto">
                 {% for j in product %}                   
                 <div class="col-md-3">
-                    <div class="card " align="center" style="border:1px solid lightgrey">
+                    <div class="card" align="center" style="border:1px solid lightgrey">
                         <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%" alt="card-img">
                         <div class="card-body">
                           <h6 class="card-title">
 {{j.name}} Rs.{{j.price}}</h6>
                           <p class="card-text" style="font-size:14px">
 {{j.description}}</p>
-                     
-                                  <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary mr-2">
-                                        <a href="/add-to-cart/{{j.id}}/" class="text-white">
-                                            <i class="fa fa-shopping-cart"></i> 
-                                        </a>
-                                    </button> <div style="margin-right: 10px;"></div>
-                                    <button type="submit" class="btn btn-danger">
-                                        <a href="/product-detail/{{j.id}}/" class="text-white">
-                                            <i class="fa fa-eye"></i> 
-                                        </a>
-                                    </button> <div style="margin-right: 10px;"></div>
-                                    <button type="submit" class="btn btn-success">
-                                      <a href="{% url 'wishlist' j.id %}" class="text-white">
-                                          <i class="fa fa-heart"></i> 
-                                      </a>
-                                  </button>
-                                  
+                          <button type="submit" class="btn btn-primary">
+                            <a href="/add-to-cart/{{j.id}}/" class="btn btn-primary">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                              </a>
+                              <a href="/product-detail/{{j.id}}/" >
+                                {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
+                                {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
+                              </a></button><br><br>
+                              <button type="submit" class="btn btn-danger">
+                               
+                                  <a href="/product-detail/{{j.id}}/" style="color:white" >
+                                    {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
+                                    {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
+                                  View</a></button>
                               
-                                </div>
                         </div>
                       </div>
                   </div>

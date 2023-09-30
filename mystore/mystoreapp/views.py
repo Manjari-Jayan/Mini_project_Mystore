@@ -4,12 +4,50 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import Product
+from django.contrib.auth.decorators import login_required
+
+
 
 
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def home(request):
-    return render(request,'home.html')
+    allcategory = Category.objects.all()
+    nested_categories = []
+    # for category in allcategory:
+    #     category_dict = {'category': category, 'subcategories': []}
+
+    #     subcategories = Subcategory.objects.filter(category=category)
+
+    #     for subcategory in subcategories:
+    #         category_dict['subcategories'].append(subcategory)
+
+    #     nested_categories.append(category_dict)
+    for category in allcategory:
+        category_dict = {'category': category, 'subcategories': []}
+
+        subcategories = Subcategory.objects.filter(category=category)
+        
+
+
+        for subcategory in subcategories:
+            subcategory_dict = {'subcategory': subcategory, 'subsubcategories': []}
+            seriescategories = Series.objects.filter(category=category, brand=subcategory)
+
+            for subsubcategory in seriescategories:
+                subcategory_dict['subsubcategories'].append(subsubcategory)
+            category_dict['subcategories'].append(subcategory_dict)
+
+        
+        nested_categories.append(category_dict)
+    for c in nested_categories:
+        for s in c['subcategories']:
+            print(s['subsubcategories'])
+    # print(nested_categories)
+
+    products = Product.objects.all()
+    return render(request,'home.html',{'nested_categories': nested_categories, 'products': products})
 
 def index(request):
     return render(request, 'navigation.html')
@@ -17,11 +55,12 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
-from .models import Carousel, Cart, Subcategory, UserProfile
+from .models import Carousel, Cart, Series, Subcategory, UserProfile
 def main(request):
     data = Carousel.objects.all()
     dic = {'data':data}
-    return render(request, 'index.html', dic)
+    allcategory = Category.objects.all()
+    return render(request, 'index.html', locals())
 
 #admin related 
 
@@ -64,7 +103,7 @@ def view_category(request):
     category = Category.objects.all()
     return render(request, 'view_category.html', locals())
 
-
+ 
 def edit_category(request, pid):
     category = Category.objects.get(id=pid)
     if request.method == "POST":
@@ -87,7 +126,8 @@ def add_subcategory(request):
     if request.method == "POST":
         name = request.POST['name']
         cat = request.POST['category']
-        Subcategory.objects.create(name=name)
+        category = Category.objects.get(id=cat)
+        Subcategory.objects.create(name=name,category=category)
         messages.success(request, "SubCategory added")
         catobj = Category.objects.get(id=cat)
         return redirect('view_subcategory')
@@ -100,7 +140,7 @@ def edit_subcategory(request, pid):
         name = request.POST['name']
         subcategory.name = name
         subcategory.save()
-        msg = "SubCategory Updated"
+        msg = "Sub Category Updated"
     return render(request, 'edit_subcategory.html', locals())
 
 def delete_subcategory(request, pid):
@@ -112,20 +152,65 @@ def view_subcategory(request):
     subcategory = Subcategory.objects.all()
     return render(request, 'view_subcategory.html', locals())
 
+
+
+
+#--------------------------------Series-----------------------------------
+def add_series(request):
+    category = Category.objects.all()
+    brand = Subcategory.objects.all()
+    if request.method == "POST":
+        name = request.POST['name']
+        cat = request.POST['category']
+        brandid = request.POST['brand']
+        category = Category.objects.get(id=cat)
+        brand = Subcategory.objects.get(id=brandid)
+        Series.objects.create(name=name,category=category,brand=brand)
+        messages.success(request, "Series added")
+        catobj = Category.objects.get(id=cat)
+        brandobj = Subcategory.objects.get(id=brandid)
+        return redirect('view_series')
+    return render(request, 'add_series.html', locals())
+
+def edit_series(request, pid):
+    series = Series.objects.get(id=pid)
+    if request.method == "POST":
+        name = request.POST['name']
+        series.name = name
+        series.save()
+        msg = "Series Updated"
+    return render(request, 'edit_series.html', locals())
+
+def delete_series(request, pid):
+    series = Series.objects.get(id=pid)
+    series.delete()
+    return redirect('view_series')
+
+def view_series(request):
+    series = Series.objects.all()
+    return render(request, 'view_series.html', locals())
+
+
 # ------------------------------------------Product-------------------
 
 from .models import Product
 def add_product(request):
     category = Category.objects.all()
+    brand = Subcategory.objects.all()
+    series =Series.objects.all()
     if request.method == "POST":
         name = request.POST['name']
         price = request.POST['price']
         cat = request.POST['category']
+        brandid = request.POST['brand']
+        seriesid = request.POST['series']
         discount = request.POST['discount']
         desc = request.POST['desc']
         image = request.FILES['image']
         catobj = Category.objects.get(id=cat)
-        Product.objects.create(name=name, price=price, discount=discount, category=catobj, description=desc, image=image)
+        brandobj = Subcategory.objects.get(id=brandid)
+        seriesobj = Series.objects.get(id=seriesid)
+        Product.objects.create(name=name, price=price, discount=discount, category=catobj, brand=brandobj, series=seriesobj, description=desc, image=image)
         messages.success(request, "Product added")
     return render(request, 'add_product.html', locals())
 
@@ -138,10 +223,13 @@ def view_product(request):
 def edit_product(request, pid):
     product = Product.objects.get(id=pid)
     category = Category.objects.all()
+    brand = Subcategory.objects.all()
     if request.method == "POST":
         name = request.POST['name']
         price = request.POST['price']
         cat = request.POST['category']
+        brandid = request.POST['brand']
+        seriesid = request.POST['series']
         discount = request.POST['discount']
         desc = request.POST['desc']
         try:
@@ -151,7 +239,9 @@ def edit_product(request, pid):
         except:
             pass
         catobj = Category.objects.get(id=cat)
-        Product.objects.filter(id=pid).update(name=name, price=price, discount=discount, category=catobj, description=desc)
+        brandobj = Subcategory.objects.get(id=brandid)
+        seriesobj = Series.objects.get(id=seriesid)
+        Product.objects.filter(id=pid).update(name=name, price=price, discount=discount, category=catobj, brand=brandobj, series=seriesobj, description=desc)
         messages.success(request, "Product Updated")
     return render(request, 'edit_product.html', locals())
 
@@ -333,14 +423,69 @@ def user_product(request,pid):
     else:
         category = Category.objects.get(id=pid)
         product = Product.objects.filter(category=category)
+        
     allcategory = Category.objects.all()
+    nested_categories = []
+    for category in allcategory:
+        category_dict = {'category': category, 'subcategories': []}
+
+        subcategories = Subcategory.objects.filter(category=category)
+
+        for subcategory in subcategories:
+            category_dict['subcategories'].append(subcategory)
+
+        nested_categories.append(category_dict)
     return render(request, "user-product.html", locals())
 
+def brand_product(request,pid):
+    
+    subcategory = Subcategory.objects.get(id=pid)
+    product = Product.objects.filter(brand=subcategory)
+        
+    allcategory = Category.objects.all()
+    nested_categories = []
+    for category in allcategory:
+        category_dict = {'category': category, 'subcategories': []}
+
+        subcategories = Subcategory.objects.filter(category=category)
+
+        for subcategory in subcategories:
+            category_dict['subcategories'].append(subcategory)
+
+        nested_categories.append(category_dict)
+    return render(request, "brand.html", locals())
+
+def series_product(request,pid):
+    series = Series.objects.get(id=pid)
+    product = Product.objects.filter(series=series)       
+    allcategory = Category.objects.all()
+    nested_categories = []
+    for category in allcategory:
+        category_dict = {'category': category, 'subcategories': []}
+        subcategories = Subcategory.objects.filter(category=category)
+
+        for subcategory in subcategories:
+            category_dict['subcategories'].append(subcategory)
+
+        nested_categories.append(category_dict)
+    return render(request, "series.html", locals())
 
 
 def product_detail(request, pid):
     product = Product.objects.get(id=pid)
     latest_product = Product.objects.filter().exclude(id=pid).order_by('-id')[:10]
+    allcategory = Category.objects.all()
+    nested_categories = []
+    for category in allcategory:
+        category_dict = {'category': category, 'subcategories': []}
+
+        subcategories = Subcategory.objects.filter(category=category)
+
+        for subcategory in subcategories:
+            category_dict['subcategories'].append(subcategory)
+
+        nested_categories.append(category_dict)
+    
     return render(request, "product_detail.html", locals())
 
 
@@ -400,6 +545,78 @@ def deletecart(request, pid):
     messages.success(request, "Delete Successfully")
     return redirect('cart')
 
+#-------------------------------------------------------------wishlist-----------------------------
+
+from .models import WishlistItem
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def wishlist(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+        wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
+        if created:
+            message = "Product added to wishlist successfully."
+        else:
+            message = "Product is already in your wishlist."
+        
+        # Retrieve the user's wishlist items
+        wishlist_items = WishlistItem.objects.filter(user=request.user)
+        
+        return render(request, 'wishlist.html', {
+            'message': message,
+            'wishlist_items': wishlist_items,
+        })
+    except Product.DoesNotExist:
+        return render(request, 'wishlist.html', {
+            'message': "Product not found.",
+        })
+    
+
+   
+
+@login_required
+def view_wishlist(request):
+    if request.user.is_authenticated:
+        wishlist_items = WishlistItem.objects.filter(user=request.user)
+        return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+    else:
+        # Handle the case when the user is not authenticated
+        # Redirect to the login page or show a message
+        return redirect('login')
+
+from django.shortcuts import render, redirect
+from .models import WishlistItem
+from .models import Product  # Import the Product model if not already imported
+
+@login_required
+def remove_from_wishlist(request, product_id):
+    if request.user.is_authenticated:
+        product = Product.objects.get(id=product_id)
+        wishlist_items = WishlistItem.objects.filter(user=request.user, product=product)
+        wishlist_items.delete()
+        
+        # Assuming you have a queryset for wishlist items that you want to pass to the template
+        wishlist_items = WishlistItem.objects.filter(user=request.user)
+
+        context = {
+            'wishlist_items': wishlist_items,
+            # You can add more context data as needed
+        }
+        
+        return render(request, 'wishlist.html', context)
+    
+    return redirect('wishlist')  # You can still include the redirect if needed
+
+@login_required
+def check_empty_wishlist(request):
+    if request.user.is_authenticated:
+        wishlist_items = WishlistItem.objects.filter(user=request.user)
+        is_empty = not wishlist_items.exists()
+        return JsonResponse({"is_empty": is_empty})
+
 
 
 def manage_user(request):
@@ -445,4 +662,31 @@ def admin_dashboard(request):
     product = Product.objects.filter()
 
     return render(request, 'admin_dashboard.html', locals())
- 
+
+
+from django.http import JsonResponse
+
+#--------------------------------search-----------------------------------------------------
+
+def search_products(request):
+    query = request.GET.get('q')
+    if query:
+        # Perform a database query to retrieve products based on the search query.
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = []
+
+    return render(request, 'search_products.html', {'products': products, 'query': query})
+
+def search_suggestions(request):
+    query = request.GET.get('q')
+    if query:
+        # Perform a database query to retrieve suggestions based on the search query.
+        suggestions = Product.objects.filter(name__icontains=query).values('name')[:10]
+        suggestion_list = [item['name'] for item in suggestions]
+    else:
+        suggestion_list = []
+
+    return JsonResponse(suggestion_list, safe=False)
+
+

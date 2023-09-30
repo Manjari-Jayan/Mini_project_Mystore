@@ -59,8 +59,10 @@
                             <button class="btn-theme btn buy-btn" tabindex="0">
                             <i class="fa fa-shopping-cart"></i> Buy Now
                             </button>
-                            <button class="btn-theme btn btn-success" tabindex="0">
-                            <i class="fa fa-shopping-cart"></i> Add to Cart
+                            <button type="submit" class="btn-theme btn btn-primary" tabindex="0">
+                              <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                                 <i class="fa fa-shopping-cart"></i> Add to cart
+                             </a>
                             </button>
                             <input type="hidden" name="pid" value="18" />
                             <input type="hidden" name="price" value="850" />

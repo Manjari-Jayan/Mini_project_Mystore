@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+</head>
+<body>
+
+
+
+    {% extends 'navigation.html' %}
+    {% block body %}
+    <h6> commented</h6>
+    <style>     
+    </style>
+    <h4>Banner </h4>
+    <div class="container-fluid mt-2">
+      <div class="container-fluid">
+          <div class="row w-100 mx-auto">
+            {% for product in products %}
+                <div class="col-md-3">
+                <div class="card" align="center" style="border:1px solid lightgrey">
+                    <img class="card-img-top img-thumbnail" src="{{product.image.url}}" style="width:100%" alt="card-img">
+                    <div class="card-body">
+                      <h6 class="card-title">
+    {{product.name}} Rs.{{product.price}}</h6>
+                      <p class="card-text" style="font-size:14px">
+    {{product.description}}</p>
+                      <button type="submit" class="btn btn-primary">
+                        <a href="/add-to-cart/{{product.id}}/" class="btn btn-primary">
+                            <i class="fa fa-shopping-cart"></i> 
+                            {% comment %} Add to cart {% endcomment %}
+                          </a>
+                          <a href="/product-detail/{{j.id}}/" >
+                            {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
+                            {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
+                          </a></button><br><br>
+                          <button type="submit" class="btn btn-danger">
+                           
+                              <a href="/product-detail/{{product.id}}/" style="color:white" >
+                                {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
+                                {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
+                              View</a></button>
+                          
+                    </div>
+                  </div>
+              </div>
+            {% empty %}
+              <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                      {% comment %} <img src="{% static 'images/empty.jpg' %}" /> {% endcomment %}
+                    </div>
+                  </div>
+              </div>
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+    
+    
+    {% endblock %}
+
+{% comment %} 
+
+    <h1>Search Results</h1>
+    <ul>
+       
+            <li>{{ product.name }}</li>
+        {% empty %}
+            <li>No products found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html> {% endcomment %}

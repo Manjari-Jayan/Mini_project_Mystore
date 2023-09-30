@@ -1,10 +1,11 @@
 
+from django import views
 from django.contrib import admin
 from django.urls import path
-from mystoreapp.views import home,index,about,main
-from mystoreapp.views import adminHome,admin_dashboard,adminLogin,add_category,view_category
-from mystoreapp.views import edit_category,delete_category,add_product,view_product, delete_product,edit_product,add_subcategory,view_subcategory,edit_subcategory,delete_subcategory
-from mystoreapp.views import registration,userlogin,profile,change_password,user_product,product_detail, addToCart, cart,incredecre,deletecart,manage_user,delete_user,admin_change_password,logoutuser
+from mystoreapp.views import  check_empty_wishlist, delete_series, edit_series, home,index,about,main, remove_from_wishlist, search_suggestions, series_product, view_series, view_wishlist, wishlist
+from mystoreapp.views import adminHome,admin_dashboard,adminLogin,add_category,view_category, search_products
+from mystoreapp.views import edit_category,delete_category,add_product,view_product, delete_product,edit_product,add_subcategory,view_subcategory,edit_subcategory,delete_subcategory,add_series
+from mystoreapp.views import registration,userlogin,profile,change_password,user_product,brand_product,product_detail, addToCart, cart,incredecre,deletecart,manage_user,delete_user,admin_change_password,logoutuser
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,23 +32,38 @@ urlpatterns = [
     path('view-subcategory/', view_subcategory, name="view_subcategory"),
     path('edit-subcategory/<int:pid>/', edit_subcategory, name="edit_subcategory"),
     path('delete-subcategory/<int:pid>/', delete_subcategory, name="delete_subcategory"),
+    path('add-series/', add_series, name="add_series"),
+    path('view-series/', view_series, name="view_series"),
+    path('edit-series/<int:pid>/', edit_series, name="edit_series"),
+    path('delete-series/<int:pid>/', delete_series, name="delete_series"),
     # path('add-subproduct/', add_subproduct, name='add_subproduct'),
     # path('view-subproduct/', view_subproduct, name='view_subproduct'),
     # path('edit-subproduct/<int:pid>/', edit_subproduct, name="edit_subproduct"),
     # path('delete-subproduct/<int:pid>/', delete_subproduct, name="delete_subproduct"),
-    
+    path('search/', search_products, name='search_products'),
+    path('search-suggestions/', search_suggestions, name='search_suggestions'),
     path('registration/', registration, name="registration"),
     path('userlogin/', userlogin, name="userlogin"),
     path('profile/', profile, name="profile"),
     path('change-password/', change_password, name="change_password"),
     path('user-product/<int:pid>/', user_product, name="user_product"),
+    path('brand/<int:pid>/', brand_product, name="brand_product"),
+    path('series/<int:pid>/', series_product, name="series_product"),
     path('product-detail/<int:pid>/', product_detail, name="product_detail"),
     path('add-to-cart/<int:pid>/', addToCart, name="addToCart"),
     path('cart/', cart, name="cart"),
+    path('wishlist/<int:product_id>/', wishlist, name='wishlist'),
+    path('remove_from_wishlist/<int:product_id>/', remove_from_wishlist, name='remove_from_wishlist'),
+    path('check_empty_wishlist/', check_empty_wishlist, name='check_empty_wishlist'),
+    path('view_wishlist/', view_wishlist, name='view_wishlist'),
+#    path('view_wishlist/<int:product_id>/', view_wishlist, name='view_wishlist'),
+
+    # path('wishlist/', wishlist, name="wishlist"),
     path('incredecre/<int:pid>/', incredecre, name="incredecre"),
     path('deletecart/<int:pid>/', deletecart, name="deletecart"),
     path('manage-user/', manage_user, name="manage_user"),
     path('delete-user/<int:pid>/', delete_user, name="delete_user"),
     path('admin-change-password/',admin_change_password, name="admin_change_password"),
     path('logout/', logoutuser, name="logout"),
+
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
