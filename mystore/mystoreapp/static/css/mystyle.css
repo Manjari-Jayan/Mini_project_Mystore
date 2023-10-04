@@ -11,7 +11,7 @@
   }
   .nav-link:hover{
     color: green !important;
-    background-color : orange;
+    /* background-color : orange; */
     border-radius : 30px;
   }
   

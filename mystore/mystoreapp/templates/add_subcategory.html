@@ -3,41 +3,100 @@
 
 <div class="card shadow">
     <div class="card-body">
-        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add SubCategory</h5>
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add Brands</h5>
         <div class="container-fluid">
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-row">
-
+        
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Product Category</label>
                             <select name="category" class="form-control" required>
                                 <option value="">Choose Category</option>
-                                {% for i in category %}
+                                {% for i in categories %}
                                 <option value="{{i.id}}">{{i.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-
+        
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label>SubCategory Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="SubCategory Name">
+                            <label>Brand Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Brand Name" id="brandNameInput" required>
+                            <small id="brandNameError" class="form-text text-danger"></small>
                         </div>
                     </div>
                 </div>
                 <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary">
             </form>
+        
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert{% if 'brand-exists' in message.tags %} alert-danger{% elif 'brand-created' in message.tags %} alert-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
+        
     </div>
 </div>
 
-{% if msg %}
-<script>
-    alert('{{msg}}')
-</script>
-{% endif %}
-{% endblock %}
 
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const brandNameInput = document.getElementById('brandNameInput');
+        const brandNameError = document.getElementById('brandNameError');
+        const brandExistsMessage = document.getElementById('brandExistsMessage');
+        const brandCreatedMessage = document.getElementById('brandCreatedMessage');
+
+        brandNameInput.addEventListener('input', function () {
+            const brandName = brandNameInput.value.trim();
+            const isValid = /^[A-Z][a-z]*( [A-Z][a-z]*)*$/.test(brandName);
+
+            if (!isValid) {
+                brandNameError.textContent = 'Brand name should start with a capital letter, followed by lowercase letters (e.g., My Brand), and no numbers.';
+                brandNameInput.classList.add('is-invalid');
+            } else {
+                brandNameError.textContent = '';
+                brandNameInput.classList.remove('is-invalid');
+            }
+        });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            const brandName = brandNameInput.value.trim();
+            const isValid = /^[A-Z][a-z]*( [A-Z][a-z]*)*$/.test(brandName);
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if the input is not valid
+                brandNameError.textContent = 'Invalid brand name format. Follow the rules: First letter capital, rest lowercase, first letter after spaces capital, no numbers.';
+                brandNameInput.classList.add('is-invalid');
+            } else {
+                brandNameError.textContent = '';
+                brandNameInput.classList.remove('is-invalid');
+            }
+
+            // Display brand name messages
+            if (document.querySelector('.alert-danger')) {
+                brandExistsMessage.style.display = 'block';
+                brandCreatedMessage.style.display = 'none';
+            } else if (document.querySelector('.alert-success')) {
+                brandExistsMessage.style.display = 'none';
+                brandCreatedMessage.style.display = 'block';
+            } else {
+                brandExistsMessage.style.display = 'none';
+                brandCreatedMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+
+
+
+{% endblock %}

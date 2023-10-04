@@ -28,3 +28,4 @@ def productprice(pid):
 def producttotalprice(pid, qty):
     data = Product.objects.get(id=pid)
     return int(qty) * int(data.price)
+

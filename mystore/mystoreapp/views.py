@@ -5,6 +5,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Product
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -15,42 +16,25 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     allcategory = Category.objects.all()
     nested_categories = []
-    # for category in allcategory:
-    #     category_dict = {'category': category, 'subcategories': []}
-
-    #     subcategories = Subcategory.objects.filter(category=category)
-
-    #     for subcategory in subcategories:
-    #         category_dict['subcategories'].append(subcategory)
-
-    #     nested_categories.append(category_dict)
     for category in allcategory:
         category_dict = {'category': category, 'subcategories': []}
 
         subcategories = Subcategory.objects.filter(category=category)
-        
-
 
         for subcategory in subcategories:
-            subcategory_dict = {'subcategory': subcategory, 'subsubcategories': []}
-            seriescategories = Series.objects.filter(category=category, brand=subcategory)
+            category_dict['subcategories'].append(subcategory)
 
-            for subsubcategory in seriescategories:
-                subcategory_dict['subsubcategories'].append(subsubcategory)
-            category_dict['subcategories'].append(subcategory_dict)
-
-        
         nested_categories.append(category_dict)
-    for c in nested_categories:
-        for s in c['subcategories']:
-            print(s['subsubcategories'])
-    # print(nested_categories)
+    
 
     products = Product.objects.all()
     return render(request,'home.html',{'nested_categories': nested_categories, 'products': products})
 
 def index(request):
     return render(request, 'navigation.html')
+
+def three(request):
+    return render(request, '3d.html')
 
 def about(request):
     return render(request, 'about.html')
@@ -94,8 +78,15 @@ from .models import Category
 def add_category(request):
     if request.method == "POST":
         name = request.POST['name']
-        Category.objects.create(name=name)
-        msg = "Category added"
+        
+        # Check if the category already exists
+        if Category.objects.filter(name=name).exists():
+            category_exist_msg = "Category already exists"
+        else:
+            # Category doesn't exist, create it
+            Category.objects.create(name=name)
+            category_added_msg = "Category added successfully"
+    
     return render(request, 'add_category.html', locals())
 
 
@@ -121,17 +112,27 @@ def delete_category(request, pid):
 
 # <!--------------------------Subcategory--------->
 
+from mystoreapp.models import Category  # Import your Category model
+
+
+
+
 def add_subcategory(request):
-    category = Category.objects.all()
+    categories = Category.objects.all()
+    
     if request.method == "POST":
         name = request.POST['name']
         cat = request.POST['category']
         category = Category.objects.get(id=cat)
-        Subcategory.objects.create(name=name,category=category)
-        messages.success(request, "SubCategory added")
-        catobj = Category.objects.get(id=cat)
-        return redirect('view_subcategory')
-    return render(request, 'add_subcategory.html', locals())
+        
+        # Check if the brand name already exists
+        if Subcategory.objects.filter(name=name, category=category).exists():
+            messages.error(request, "Brand already exists", extra_tags='brand-exists')
+        else:
+            Subcategory.objects.create(name=name, category=category)
+            messages.success(request, "Brand added successfully", extra_tags='brand-created')
+
+    return render(request, 'add_subcategory.html', {'categories': categories})
 
 
 def edit_subcategory(request, pid):
@@ -532,6 +533,14 @@ def cart(request):
     except:
         product = []
     lengthpro = len(product)
+    allcategories = Category.objects.all()
+    nested_categories = []
+    for category in allcategories:
+        category_dict = {'category': category, 'subcategories': []}
+        subcategories = Subcategory.objects.filter(category=category)
+        for subcategory in subcategories:
+            category_dict['subcategories'].append(subcategory)
+        nested_categories.append(category_dict)
     return render(request, 'cart.html', locals())
 
 
@@ -552,40 +561,54 @@ from .models import WishlistItem
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+
+
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+
 @login_required
 def wishlist(request, product_id):
     try:
         product = Product.objects.get(pk=product_id)
         wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
         if created:
-            message = "Product added to wishlist successfully."
+            messages.success(request, "Product added to wishlist successfully.")
         else:
-            message = "Product is already in your wishlist."
-        
-        # Retrieve the user's wishlist items
-        wishlist_items = WishlistItem.objects.filter(user=request.user)
-        
-        return render(request, 'wishlist.html', {
-            'message': message,
-            'wishlist_items': wishlist_items,
-        })
+            messages.info(request, "Product is already in your wishlist.")
+
+        return HttpResponseRedirect(reverse('home'))  # Redirect to the home page after liking/unliking
     except Product.DoesNotExist:
-        return render(request, 'wishlist.html', {
-            'message': "Product not found.",
-        })
-    
+        messages.error(request, "Product not found.")
+        return HttpResponseRedirect(reverse('home'))
 
    
-
 @login_required
 def view_wishlist(request):
     if request.user.is_authenticated:
         wishlist_items = WishlistItem.objects.filter(user=request.user)
-        return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
+        # Retrieve the categories and nested categories again for the wishlist page
+        allcategory = Category.objects.all()
+        nested_categories = []
+        for category in allcategory:
+            category_dict = {'category': category, 'subcategories': []}
+
+            subcategories = Subcategory.objects.filter(category=category)
+
+            for subcategory in subcategories:
+                category_dict['subcategories'].append(subcategory)
+
+            nested_categories.append(category_dict)
+
+        return render(request, 'wishlist.html', {
+            'wishlist_items': wishlist_items,
+            'nested_categories': nested_categories,  # Pass the categories to the wishlist template
+        })
     else:
         # Handle the case when the user is not authenticated
         # Redirect to the login page or show a message
         return redirect('login')
+
 
 from django.shortcuts import render, redirect
 from .models import WishlistItem
@@ -668,25 +691,49 @@ from django.http import JsonResponse
 
 #--------------------------------search-----------------------------------------------------
 
+
+
 def search_products(request):
     query = request.GET.get('q')
+    
+    # Modify this part to suit your model and query requirements
+    products = Product.objects.select_related('category', 'brand')
+    
     if query:
-        # Perform a database query to retrieve products based on the search query.
-        products = Product.objects.filter(name__icontains=query)
-    else:
-        products = []
+        products = products.filter(name__icontains=query)
+    
+    return render(request, 'index.html', {'products': products, 'query': query})
+#-------------------------------------------------------------comparison-----------------------------------------
 
-    return render(request, 'search_products.html', {'products': products, 'query': query})
+from .models import ComparisonList
 
-def search_suggestions(request):
-    query = request.GET.get('q')
-    if query:
-        # Perform a database query to retrieve suggestions based on the search query.
-        suggestions = Product.objects.filter(name__icontains=query).values('name')[:10]
-        suggestion_list = [item['name'] for item in suggestions]
-    else:
-        suggestion_list = []
+def add_to_comparison(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    comparison_list, created = ComparisonList.objects.get_or_create()
+    comparison_list.products.add(product)
+    return redirect('product_comparison')
 
-    return JsonResponse(suggestion_list, safe=False)
+def remove_from_comparison(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    comparison_list = ComparisonList.objects.first()
+    comparison_list.products.remove(product)
+    return redirect('product_comparison')
+
+  # Import your Product model or replace it with the actual model you're using for products
+
+def product_comparison(request, comparison_id):
+    try:
+        comparison_list = ComparisonList.objects.get(id=comparison_id)
+        products_to_compare = comparison_list.products.all()
+        # Debugging: Print the products related to the comparison list
+        print('Products in Comparison List:', products_to_compare)
+        return render(request, 'comparison.html', {'selectedProducts': products_to_compare})
+    except ComparisonList.DoesNotExist:
+        # Handle the case when the comparison list does not exist
+        # Redirect or display an error message as needed
+        return HttpResponse('Comparison list not found')
+
+
+#--------------------------------------------------------------category validation-------------------------
 
 

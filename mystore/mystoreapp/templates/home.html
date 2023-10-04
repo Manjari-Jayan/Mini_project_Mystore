@@ -1,126 +1,116 @@
 {% extends 'navigation.html' %}
+{% load static %}
 {% block body %}
-<h6> commented</h6> 
-<style>
- 
-</style>
-{% comment %}<div class="video-slider">
-  <div class="video-slide">
-      <video controls>
-          <source src="video1.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-      </video>
-  </div>
-  <div class="video-slide">
-      <video controls>
-          <source src="video2.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-      </video>
-  </div>
-  <!-- Add more video slides as needed -->
-</div> {% endcomment %}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
 
-{% comment %} <h4>Banner </h4> {% endcomment %}
-{% comment %} <div class="container-fluid mt-2">
-  <div class="container-fluid">
-      <div class="row w-100 mx-auto">
-        {% for j in products %}                   
-        <div class="col-md-3">
-            <div class="card" align="center" style="border:1px solid lightgrey">
-                <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%" alt="card-img">
-                <div class="card-body">
-                  <h6 class="card-title">
-{{j.name}} Rs.{{j.price}}</h6>
-                  <p class="card-text" style="font-size:14px">
-{{j.description}}</p>
+            <style>
+                .swiper{
+            
+                    width: 90%;
+                    height: fit-content;
+                    height: 50vh;
+                    position: relative;
+                    border-radius: 10px;
+                
+                }
+                .swiper-slide > img{
+                
+                 width: 100%;
+                 height: 100%;
+                
+                }
+                .swiper .swiper-button-prev, .swiper .swiper-button-next{
+                
+                color: #fff;
+                
+                
+                }
+                .swiper .swiper-pagination-bullet-active{
+                
+                   background-color: #fff;
+                
+                 }
+                 .swiper-slide h3{
+                
+                 color: #fff;
+                 text-align: center;
+                 position: absolute;
+                
                  
+                
+                 }
+                 .swiper_info{
+                
+                    position: absolute;
+                    color: rgb(255, 255, 255);
+                    padding: 15px 20px;
+                    margin: 5px 33px;
+                    top: 40px;
+                    box-shadow: 4px 5px 22px -4px rgb(255 250 255);
+                    /* background: linear-gradient(90deg, rgba(255, 42, 0, 0.6) 0%, rgba(219, 18, 18, 0.24) 100%); */
+                    background: linear-gradient(90deg, rgb(33, 37, 41) 0%, rgba(33, 37, 41, 0.4) 100%);
+                   border-radius: 10px;
+                
+                 }
+                 .swiper_info h3{
+                
+                  
+                   padding: 15px 8px;
+                   margin: 4px 20px;
+                   
+                
+                 }
+                .swiper_info p{
+                
+                    top: 55px;
+                background-color: #ff123e;
+                padding: 5px 10px;
+                    margin: 80px 20px;
+                    padding: 5px 8px;
+                    border-radius: 5px;
+                    text-align: center;
+                   
+                
+                }
+            </style>
+<div class="swiper" style="object-fit: cover;">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide">
+            <video controls width="100%" height="100%" autoplay muted>
+                <source src="{% static 'images/video1.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+        </div>
+        <div class="swiper-slide">        
+            <img src="{% static 'images/img4.jpg' %}" alt="" />
+        </div>
+        <div class="swiper-slide">     
+            <img src="{% static 'images/img1.jpg' %}" alt="" />
+        </div>
+        <div class="swiper-slide"> 
+            <img src="{% static 'images/img4.jpg' %}" alt="" />
+        </div>
+    </div>
+     <!-- If we need pagination -->
+     <div class="swiper-pagination"></div>
 
-                          <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary mr-2">
-                                <a href="/add-to-cart/{{j.id}}/" class="text-white">
-                                    <i class="fa fa-shopping-cart"></i> 
-                                </a>
-                            </button>
-                            <button type="submit" class="btn btn-danger">
-                                <a href="/product-detail/{{j.id}}/" class="text-white">
-                                  <i class="fa fa-eye"></i>
-                                </a>
-                            </button>
-                        </div>
-                      
-                </div>
-              </div>
-          </div>
-        {% empty %}
-          <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                  {% comment %} <img src="{% static 'images/empty.jpg' %}" /> {% endcomment %}
-                {% comment %} </div>
-              </div>
-          </div>
-        {% endfor %}
-      </div>
-  </div>
+     <!-- If we need navigation buttons -->
+     <div class="swiper-button-prev"></div>
+     <div class="swiper-button-next"></div>
+ 
+     <!-- If we need scrollbar -->
+     <div class="swiper-scrollbar"></div>
 </div>
 
+   
+</div>
 
-{% endblock %}  {% endcomment %}
-
-{% comment %} <button type="submit" class="btn btn-primary">
-  <a href="/add-to-cart/{{j.id}}/" class="btn btn-primary">
-      <i class="fa fa-shopping-cart"></i>
-    </a>
-    <a href="/product-detail/{{j.id}}/" >
-      <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> 
-     <i class="fa fa-info" style="font-size:22px"></i>
-    </a></button><br>
-    <button type="submit" class="btn btn-danger">
-     
-        <a href="/product-detail/{{j.id}}/" style="color:white" >
-           <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> 
-          <i class="fa fa-info" style="font-size:22px"></i> 
-        View</a></button>  {% endcomment %}
-
-        {% comment %} <script>
-          $(document).ready(function() {
-              var currentSlide = 0;
-              var slides = $('.video-slide');
-      
-              // Function to show the next video slide
-              function showNextSlide() {
-                  slides.eq(currentSlide).fadeOut(1000);
-                  currentSlide = (currentSlide + 1) % slides.length;
-                  slides.eq(currentSlide).fadeIn(1000);
-              }
-      
-              // Start the slide show
-              showNextSlide();
-              setInterval(showNextSlide, 5000); // Change slide every 5 seconds (adjust as needed)
-          });
-      </script> {% endcomment %}
+<h6> commented</h6> 
 
 
-
-
-      
-      {% comment %} <!-- Video Banner Slider -->
-      <div class="video-slider">
-          <div class="video-slide">
-              <video controls autoplay loop>
-                  <source src="\media\video1.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-              </video>
-          </div>
-          <div class="video-slide">
-              <video controls autoplay loop>
-                  <source src="video2.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-              </video>
-          </div>
-          <!-- Add more video slides as needed -->
-      </div> {% endcomment %}
-      
       <div class="container-fluid mt-2">
         <div class="container-fluid">
             <div class="row w-100 mx-auto">
@@ -138,23 +128,33 @@
                                 {{j.description}}
                             </p>
                             <div class="d-flex justify-content-center">
-                              <a href="/add-to-cart/{{j.id}}/" class="text-white">
-                                  <button type="submit" class="btn btn-primary mr-2">
-                                      <i class="fa fa-shopping-cart"></i>
-                                  </button>
-                              </a>
-                              <a href="/product-detail/{{j.id}}/" class="text-white">
-                                  <button type="submit" class="btn btn-danger mr-2">
-                                      <i class="fa fa-eye"></i>
-                                  </button>
-                              </a>
-                              <a href="/wishlist/{{j.id}}/" class="text-white">
-                                  <button type="submit" class="btn btn-success" >
-                                      <i class="fa fa-heart"></i>
-                                  </button>
-                              </a>
-                          </div>
-                          
+                                <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                                    <button type="submit" class="btn btn-primary mr-2">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </button>
+                                </a>
+                                <a href="/product-detail/{{j.id}}/" class="text-white">
+                                    <button type="submit" class="btn btn-danger mr-2">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </a>
+                               
+                                   
+                                <button type="button" class="btn btn-primary mr-2 compare-button add-to-compare" data-product-id="{{ j.id }}" style="width: 36px; height: 32px;">
+                                    <i class="fa fa-exchange-alt"></i>
+                                </button>
+
+                               
+                                <form action="/wishlist/{{j.id}}/" method="post" class="like-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success like-button {% if j.is_liked_by_user %}liked{% endif %}">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+                                </form>
+                                <!-- Hidden pop-up message div -->
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,17 +166,148 @@
                         </div>
                     </div>
                 </div>
+               
                 {% endfor %}
             </div>
         </div>
     </div>
     
-      
-      <!-- JavaScript/jQuery for Video Slider -->
-     
+    <!-- Hidden pop-up message div -->
+    <div id="popup-message" class="alert alert-success" style="display: none;">
+        <strong></strong>
+    </div>
+    
+    <!-- JavaScript/jQuery for updating the like button color and displaying the pop-up message -->
+    <script>
+    $(document).ready(function () {
+        $('.like-form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var likeButton = form.find('.like-button');
+            var heartIcon = likeButton.find('.fa-heart');
+            var productId = likeButton.data('product-id');
+            var productName = likeButton.data('product-name');
+            var message = '';
+    
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function () {
+                    if (heartIcon.hasClass('liked')) {
+                        heartIcon.removeClass('liked');
+                        likeButton.removeClass('btn-danger'); // Remove the red color class
+                        likeButton.addClass('btn-success'); // Add the green color class
+                        message = productName + ' removed from your wishlist.';
+                    } else {
+                        heartIcon.addClass('liked');
+                        likeButton.removeClass('btn-success'); // Remove the green color class
+                        likeButton.addClass('btn-danger'); // Add the red color class
+                        message = productName + ' added to your wishlist.';
+                    }
+    
+                    // Display the message as a browser alert
+                    alert(message);
+                }
+            });
+        });
+    });
+    
+</script> 
 
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 
+    <script>
+        // Initialize Swiper with autoplay and loop options
+        const swiper = new Swiper(".swiper", {
+            autoplay: {
+                delay: 5000, // Set the delay between slides (in milliseconds)
+                disableOnInteraction: false, // Continue autoplay after user interactions
+            },
+            loop: true, // Loop the carousel
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+    
+        // Function to handle video autoplay and slide transition
+        function handleVideoAutoplayAndSlideTransition() {
+            const currentSlide = swiper.slides[swiper.activeIndex];
+            const isVideoSlide = currentSlide.querySelector("video");
+            
+            if (isVideoSlide) {
+                const video = isVideoSlide.querySelector("video");
+                
+                // Play the video
+                video.play();
+                
+                // Listen for the "ended" event to transition to the next slide
+                video.addEventListener("ended", function () {
+                    swiper.slideNext(); // Transition to the next slide
+                });
+            }
+        }
+    
+        // Listen for slide change events
+        swiper.on("slideChange", handleVideoAutoplayAndSlideTransition);
+    
+        // Initialize video autoplay on the initial slide
+        handleVideoAutoplayAndSlideTransition();
+    </script>
+    
+
+<script>
+    $(document).ready(function () {
+        // Load compared products from local storage on page load
+        var comparedProducts = JSON.parse(localStorage.getItem("comparedProducts")) || [];
+    
+        // Function to update the comparison list and save to local storage
+        function updateComparisonList() {
+            $("#comparison-list").empty();
+            for (var i = 0; i < comparedProducts.length; i++) {
+                $("#comparison-list").append("<li>" + comparedProducts[i] + "</li>");
+            }
+            // Save compared products to local storage
+            localStorage.setItem("comparedProducts", JSON.stringify(comparedProducts));
+        }
+    
+        // Add to Compare button click event
+        $(".add-to-compare").click(function () {
+            var product = $(this).closest(".product");
+            var productId = product.data("id");
+            var productName = product.find("h2").text();
+    
+            if (comparedProducts.indexOf(productName) === -1) {
+                comparedProducts.push(productName);
+                updateComparisonList();
+            } else {
+                alert("Product is already in the comparison list.");
+            }
+        });
+    
+        // Remove from Comparison button click event (optional)
+        $("#comparison-list").on("click", "li", function () {
+            var productName = $(this).text();
+            var index = comparedProducts.indexOf(productName);
+            if (index !== -1) {
+                comparedProducts.splice(index, 1);
+                updateComparisonList();
+            }
+        });
+    
+        // Initialize the comparison list on page load
+        updateComparisonList();
+    });
+    
+</script>
 {% endblock %}
+
+
 
 
       

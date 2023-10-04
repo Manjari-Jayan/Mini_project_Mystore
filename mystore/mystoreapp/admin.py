@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Carousel, Cart, WishlistItem
+from .models import Carousel, Cart, ComparisonList, WishlistItem
 from .models import Category, Subcategory, Series
 from .models import UserProfile
 
@@ -13,3 +13,4 @@ admin.site.register(Carousel)
 admin.site.register(UserProfile)
 admin.site.register(Cart)
 admin.site.register(WishlistItem)
+admin.site.register(ComparisonList)

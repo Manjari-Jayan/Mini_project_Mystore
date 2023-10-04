@@ -1,0 +1,114 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+    <h1>Product Comparison</h1>
+    <div class="container-fluid mt-2">
+        <div class="container-fluid">
+            <div class="row w-100 mx-auto">
+                {% for product_id in selectedProducts %}
+                    {% with product=get_product_by_id_from_database product_id %}
+                        <div class="col-md-3">
+                            <div class="card" align="center" style="border: 1px solid lightgrey">
+                                <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                    <img class="card-img-top img-thumbnail" src="{{ product.image.url }}" style="max-height: 200px; max-width: 150px;" alt="card-img">
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        {{ product.name }} Rs.{{ product.price }}
+                                    </h6>
+                                    <p class="card-text" style="font-size: 14px">
+                                        {{ product.description }}
+                                    </p>
+                                    <div class="d-flex justify-content-center">
+                                        <!-- Add your comparison-specific content here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% empty %}
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- No products selected for comparison -->
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Add any other HTML structure or content for the comparison page as needed -->
+    <div id="compared-products">
+        <h3>Compared Products:</h3>
+        <ul id="comparison-list">
+            <!-- Comparison results will be displayed here -->
+        </ul>
+    </div>
+{% endblock %}
+
+
+    <script>
+        // Function to parse query parameters
+        function getQueryParams() {
+            var params = {};
+            var queryString = window.location.search.substring(1);
+            var pairs = queryString.split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+                params[key] = value;
+            }
+            return params;
+        }
+    
+        // Get the selected product IDs from the query parameter
+        var queryParams = getQueryParams();
+        var selectedProducts = queryParams.products.split(',');
+    
+        // You can now use the selected product IDs to display the selected products for comparison
+        console.log('Selected Products for Comparison:', selectedProducts);
+    </script>
+
+<script>
+    $(document).ready(function () {
+        var comparedProducts = [];
+    
+        // Function to update the comparison list
+        function updateComparisonList() {
+            $("#comparison-list").empty();
+            for (var i = 0; i < comparedProducts.length; i++) {
+                $("#comparison-list").append("<li>" + comparedProducts[i] + "</li>");
+            }
+        }
+    
+        // Add to Compare button click event
+        $(".add-to-compare").click(function () {
+            var product = $(this).closest(".product");
+            var productId = product.data("id");
+            var productName = product.find("h2").text();
+    
+            if (comparedProducts.indexOf(productName) === -1) {
+                comparedProducts.push(productName);
+                updateComparisonList();
+            } else {
+                alert("Product is already in the comparison list.");
+            }
+        });
+    
+        // Remove from Comparison button click event (optional)
+        $("#comparison-list").on("click", "li", function () {
+            var productName = $(this).text();
+            var index = comparedProducts.indexOf(productName);
+            if (index !== -1) {
+                comparedProducts.splice(index, 1);
+                updateComparisonList();
+            }
+        });
+    });
+    
+</script> 
+
+{% endblock %}

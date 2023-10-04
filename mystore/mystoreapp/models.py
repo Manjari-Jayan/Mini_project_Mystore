@@ -98,4 +98,11 @@ class WishlistItem(models.Model):
         return f"{self.user.username}'s Wishlist"
     
 
+class ComparisonList(models.Model):
+    products = models.ManyToManyField(Product)
+
+    def __str__(self):
+        return f"Comparison List {self.id}"
+    
+
 

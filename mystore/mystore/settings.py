@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
 ROOT_URLCONF = 'mystore.urls'

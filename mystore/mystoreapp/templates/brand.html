@@ -10,7 +10,7 @@
 All Product</a>
         {% for i in allcategory %}
           <a href="{% url 'user_product' i.id %}" class="list-group-item list-group-item-action bg-light">
-{{i.name}}</a>
+            {{i.name}}</a>
         {% endfor %}
       </div>
     </div>
@@ -34,23 +34,32 @@ View {{category.name}} Product</h4>
                         <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%" alt="card-img">
                         <div class="card-body">
                           <h6 class="card-title">
-{{j.name}} Rs.{{j.price}}</h6>
+                    {{j.name}} Rs.{{j.price}}</h6>
                           <p class="card-text" style="font-size:14px">
-{{j.description}}</p>
-                          <button type="submit" class="btn btn-primary">
-                            <a href="/add-to-cart/{{j.id}}/" class="btn btn-primary">
-                                <i class="fa fa-shopping-cart"></i> Add to cart
-                              </a>
-                              <a href="/product-detail/{{j.id}}/" >
-                                {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
-                                {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
-                              </a></button><br><br>
-                              <button type="submit" class="btn btn-danger">
-                               
-                                  <a href="/product-detail/{{j.id}}/" style="color:white" >
-                                    {% comment %} <a href="/product-detail/{{j.id}}/" class="btn btn-warning"> {% endcomment %}
-                                    {% comment %} <i class="fa fa-info" style="font-size:22px"></i> {% endcomment %}
-                                  View</a></button>
+                    {{j.description}}</p>
+                    <div class="d-flex justify-content-center">
+                      <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                          <button type="submit" class="btn btn-primary mr-2">
+                              <i class="fa fa-shopping-cart"></i>
+                          </button>
+                      </a>
+                      <a href="/product-detail/{{j.id}}/" class="text-white">
+                          <button type="submit" class="btn btn-danger mr-2">
+                              <i class="fa fa-eye"></i>
+                          </button>
+                      </a>
+                      <a href="/product_comparison/{{j.id}}/" class="text-white">
+                          <button type="submit" class="btn btn-primary mr-2">
+                              <i class="fa fa-exchange-alt"></i>
+                          </button>
+                      </a>
+                      <form action="/wishlist/{{j.id}}/" method="post" class="like-form">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-success like-button {% if j.is_liked_by_user %}liked{% endif %}">
+                              <i class="fa fa-heart"></i>
+                          </button>
+                      </form>
+                    </div>
                               
                         </div>
                       </div>
@@ -75,5 +84,41 @@ View {{category.name}} Product</h4>
   $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
+  });
+</script>
+<script>
+  $(document).ready(function () {
+      $('.like-form').on('submit', function (e) {
+          e.preventDefault();
+          var form = $(this);
+          var likeButton = form.find('.like-button');
+          var heartIcon = likeButton.find('.fa-heart');
+          var productId = likeButton.data('product-id');
+          var productName = likeButton.data('product-name');
+          var message = '';
+
+          $.ajax({
+              url: form.attr('action'),
+              type: form.attr('method'),
+              data: form.serialize(),
+              success: function () {
+                  if (heartIcon.hasClass('liked')) {
+                      heartIcon.removeClass('liked');
+                      likeButton.removeClass('btn-danger'); // Remove the red color class
+                      likeButton.addClass('btn-success'); // Add the green color class
+                      message = productName + ' removed from your wishlist.';
+                  } else {
+                      heartIcon.addClass('liked');
+                      likeButton.removeClass('btn-success'); // Remove the green color class
+                      likeButton.addClass('btn-danger'); // Add the red color class
+                      message = productName + ' added to your wishlist.';
+                  }
+
+                  // Display the pop-up message
+                  $('#popup-message strong').text(message);
+                  $('#popup-message').fadeIn().delay(2000).fadeOut();
+              }
+          });
+      });
   });
 </script>
