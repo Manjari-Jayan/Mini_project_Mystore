@@ -225,6 +225,7 @@ def edit_product(request, pid):
     product = Product.objects.get(id=pid)
     category = Category.objects.all()
     brand = Subcategory.objects.all()
+    series = Series.objects.all()
     if request.method == "POST":
         name = request.POST['name']
         price = request.POST['price']
@@ -244,6 +245,7 @@ def edit_product(request, pid):
         seriesobj = Series.objects.get(id=seriesid)
         Product.objects.filter(id=pid).update(name=name, price=price, discount=discount, category=catobj, brand=brandobj, series=seriesobj, description=desc)
         messages.success(request, "Product Updated")
+        return redirect('view_product')
     return render(request, 'edit_product.html', locals())
 
 
@@ -709,25 +711,40 @@ from .models import ComparisonList
 
 def add_to_comparison(request, product_id):
     product = Product.objects.get(pk=product_id)
-    comparison_list, created = ComparisonList.objects.get_or_create()
+    print(request.user.id)
+    user = User.objects.get(id=request.user.id)
+    comparison_list, created = ComparisonList.objects.get_or_create(user=user)
+    print(comparison_list)
     comparison_list.products.add(product)
     return redirect('product_comparison')
 
+from django.shortcuts import  get_object_or_404
+from .models import ComparisonList
+
 def remove_from_comparison(request, product_id):
-    product = Product.objects.get(pk=product_id)
-    comparison_list = ComparisonList.objects.first()
-    comparison_list.products.remove(product)
+    user = request.user
+    comparison_list, created = ComparisonList.objects.get_or_create(user=user)
+    product = get_object_or_404(Product, pk=product_id)
+
+    if product in comparison_list.products.all():
+        comparison_list.products.remove(product)
+    
     return redirect('product_comparison')
 
-  # Import your Product model or replace it with the actual model you're using for products
-
-def product_comparison(request, comparison_id):
+def product_comparison(request):
     try:
-        comparison_list = ComparisonList.objects.get(id=comparison_id)
-        products_to_compare = comparison_list.products.all()
+        # comparison_list = ComparisonList.objects.get(id=comparison_id)
+        user = User.objects.get(id=request.user.id)
+        products_to_compare = ComparisonList.objects.all().filter(user=user)
+        products = []
+
+# Loop through the comparison_lists and add the products to the products list
+        for comparison_list in products_to_compare:
+            products.extend(comparison_list.products.all())
+        print(products)
         # Debugging: Print the products related to the comparison list
-        print('Products in Comparison List:', products_to_compare)
-        return render(request, 'comparison.html', {'selectedProducts': products_to_compare})
+        print('Products in Comparison :', products_to_compare.values())
+        return render(request, 'product_comparison.html', {'selectedProducts': products})
     except ComparisonList.DoesNotExist:
         # Handle the case when the comparison list does not exist
         # Redirect or display an error message as needed

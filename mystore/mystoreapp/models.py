@@ -100,7 +100,7 @@ class WishlistItem(models.Model):
 
 class ComparisonList(models.Model):
     products = models.ManyToManyField(Product)
-
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     def __str__(self):
         return f"Comparison List {self.id}"
     

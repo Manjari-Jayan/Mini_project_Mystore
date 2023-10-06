@@ -107,13 +107,13 @@
 
    
 </div>
+<br>
+<center><h6 >Top Deals</h6> </center>
 
-<h6> commented</h6> 
 
-
-      <div class="container-fluid mt-2">
-        <div class="container-fluid">
-            <div class="row w-100 mx-auto">
+<div class="container-fluid mt-2">
+    <div class="container-fluid">
+        <div class="row w-100 mx-auto">         
                 {% for j in products %}
                 <div class="col-md-3">
                     <div class="card" align="center" style="border:1px solid lightgrey">
@@ -122,28 +122,31 @@
                         </div>
                         <div class="card-body">
                             <h6 class="card-title">
-                                {{j.name}} Rs.{{j.price}}
+                                {{j.name}} 
                             </h6>
-                            <p class="card-text" style="font-size:14px">
+                            <h6 class="card-title">
+                                 Rs.{{j.price}}
+                            </h6>
+                            {% comment %} <p class="card-text" style="font-size:14px">
                                 {{j.description}}
-                            </p>
+                            </p> {% endcomment %}
                             <div class="d-flex justify-content-center">
-                                <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                                {% comment %} <a href="/add-to-cart/{{j.id}}/" class="text-white">
                                     <button type="submit" class="btn btn-primary mr-2">
                                         <i class="fa fa-shopping-cart"></i>
                                     </button>
-                                </a>
+                                </a> {% endcomment %}
                                 <a href="/product-detail/{{j.id}}/" class="text-white">
                                     <button type="submit" class="btn btn-danger mr-2">
                                         <i class="fa fa-eye"></i>
                                     </button>
                                 </a>
                                
-                                   
+                                <a href="/add_to_comparison/{{j.id}}/" class="text-white">
                                 <button type="button" class="btn btn-primary mr-2 compare-button add-to-compare" data-product-id="{{ j.id }}" style="width: 36px; height: 32px;">
                                     <i class="fa fa-exchange-alt"></i>
                                 </button>
-
+                                </a>
                                
                                 <form action="/wishlist/{{j.id}}/" method="post" class="like-form">
                                     {% csrf_token %}
@@ -168,9 +171,9 @@
                 </div>
                
                 {% endfor %}
-            </div>
         </div>
     </div>
+</div>
     
     <!-- Hidden pop-up message div -->
     <div id="popup-message" class="alert alert-success" style="display: none;">
@@ -198,12 +201,14 @@
                         heartIcon.removeClass('liked');
                         likeButton.removeClass('btn-danger'); // Remove the red color class
                         likeButton.addClass('btn-success'); // Add the green color class
-                        message = productName + ' removed from your wishlist.';
+                        //message = productName + ' removed from your wishlist.';
+                        message = 'product removed from your wishlist.';
                     } else {
                         heartIcon.addClass('liked');
                         likeButton.removeClass('btn-success'); // Remove the green color class
                         likeButton.addClass('btn-danger'); // Add the red color class
-                        message = productName + ' added to your wishlist.';
+                        //message = productName + ' added to your wishlist.';
+                        message = 'product added to your wishlist.';
                     }
     
                     // Display the message as a browser alert
@@ -261,50 +266,49 @@
     </script>
     
 
-<script>
-    $(document).ready(function () {
-        // Load compared products from local storage on page load
-        var comparedProducts = JSON.parse(localStorage.getItem("comparedProducts")) || [];
-    
-        // Function to update the comparison list and save to local storage
-        function updateComparisonList() {
-            $("#comparison-list").empty();
-            for (var i = 0; i < comparedProducts.length; i++) {
-                $("#comparison-list").append("<li>" + comparedProducts[i] + "</li>");
+    <script>
+        $(document).ready(function () {
+            // Function to display messages
+            function showMessage(message, success) {
+                var alertClass = success ? 'alert-success' : 'alert-danger';
+                var alert = $('<div class="alert ' + alertClass + '">' + message + '</div>');
+                $('.message-container').html(alert);
             }
-            // Save compared products to local storage
-            localStorage.setItem("comparedProducts", JSON.stringify(comparedProducts));
-        }
     
-        // Add to Compare button click event
-        $(".add-to-compare").click(function () {
-            var product = $(this).closest(".product");
-            var productId = product.data("id");
-            var productName = product.find("h2").text();
+            // Add to Compare button click event
+            $(".add-to-compare").click(function () {
+                var product = $(this).closest(".product");
+                var productId = product.data("id");
+                var productName = product.find("h2").text();
     
-            if (comparedProducts.indexOf(productName) === -1) {
-                comparedProducts.push(productName);
-                updateComparisonList();
-            } else {
-                alert("Product is already in the comparison list.");
-            }
+                $.ajax({
+                    url: "/add_to_comparison/" + productId + "/",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        showMessage(data.message, true);
+                    },
+                    error: function (data) {
+                        showMessage(data.responseJSON.message, false);
+                    }
+                });
+            });
+    
+            // Remove from Comparison button click event (optional)
+            $("#comparison-list").on("click", "li", function () {
+                var productName = $(this).text();
+                var index = comparedProducts.indexOf(productName);
+                if (index !== -1) {
+                    comparedProducts.splice(index, 1);
+                    updateComparisonList();
+                }
+            });
+    
+            // Initialize the comparison list on page load
+            updateComparisonList();
         });
+    </script>
     
-        // Remove from Comparison button click event (optional)
-        $("#comparison-list").on("click", "li", function () {
-            var productName = $(this).text();
-            var index = comparedProducts.indexOf(productName);
-            if (index !== -1) {
-                comparedProducts.splice(index, 1);
-                updateComparisonList();
-            }
-        });
-    
-        // Initialize the comparison list on page load
-        updateComparisonList();
-    });
-    
-</script>
 {% endblock %}
 
 

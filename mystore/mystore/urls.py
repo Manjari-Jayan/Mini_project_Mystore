@@ -67,7 +67,7 @@ urlpatterns = [
     path('logout/', logoutuser, name="logout"),
     path('add_to_comparison/<int:product_id>/', add_to_comparison, name='add_to_comparison'),
     path('remove_from_comparison/<int:product_id>/', remove_from_comparison, name='remove_from_comparison'),
-    path('product_comparison/<int:comparison_id>/', product_comparison, name='product_comparison'),
+    path('product_comparison', product_comparison, name='product_comparison'),
    
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

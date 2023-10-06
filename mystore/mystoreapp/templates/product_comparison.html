@@ -1,12 +1,11 @@
 {% extends 'navigation.html' %}
 {% load static %}
 {% block body %}
-    <h1>Product Comparison</h1>
+<h3>Compared Products</h3>
     <div class="container-fluid mt-2">
         <div class="container-fluid">
             <div class="row w-100 mx-auto">
-                {% for product_id in selectedProducts %}
-                    {% with product=get_product_by_id_from_database product_id %}
+                {% for product in selectedProducts %}
                         <div class="col-md-3">
                             <div class="card" align="center" style="border: 1px solid lightgrey">
                                 <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
@@ -22,10 +21,17 @@
                                     <div class="d-flex justify-content-center">
                                         <!-- Add your comparison-specific content here -->
                                     </div>
+
+                                    <a href="{% url 'remove_from_comparison' product.id %}" class="text-white remove-from-comparison">
+                                        <button type="button" class="btn btn-danger btn-sm mr-2" style="font-size: 18.5px; padding: 5px 10px;">
+                                            <i class="fas fa-trash" style="font-size: 18.5px;"></i> 
+                                        </button>
+                                    </a>
+                           
+
                                 </div>
                             </div>
                         </div>
-                    {% endwith %}
                 {% empty %}
                     <div class="col-md-12">
                         <div class="card">
@@ -40,16 +46,16 @@
     </div>
 
     <!-- Add any other HTML structure or content for the comparison page as needed -->
-    <div id="compared-products">
+    {% comment %} <div id="compared-products">
         <h3>Compared Products:</h3>
         <ul id="comparison-list">
             <!-- Comparison results will be displayed here -->
         </ul>
-    </div>
+    </div> {% endcomment %}
 {% endblock %}
 
 
-    <script>
+    {% comment %} <script>
         // Function to parse query parameters
         function getQueryParams() {
             var params = {};
@@ -94,7 +100,7 @@
                 comparedProducts.push(productName);
                 updateComparisonList();
             } else {
-                alert("Product is already in the comparison list.");
+                alert("Product is added to the comparison list.");
             }
         });
     
@@ -109,6 +115,5 @@
         });
     });
     
-</script> 
+</script>  {% endcomment %}
 
-{% endblock %}

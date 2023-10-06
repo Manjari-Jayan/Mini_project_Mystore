@@ -8,6 +8,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" rel="stylesheet"/>
 </head>
+<style>
+   .btn-custom {
+      background-color: #fe0000; /* Change this to your desired color */
+      color: #fff; /* Text color for contrast */
+  }
+</style>
 <body>
 
 
@@ -33,7 +39,7 @@
                 </div>
              </div>
           </div>
-          <div class="col-md-6">
+         <div class="col-md-6">
              <div class="_product-detail-content">
                 <p class="_p-name product-name">{{product.name}} </p>
                 <div class="_p-price-box">
@@ -54,28 +60,38 @@
                       <span> Description About this product:- </span>
                       {{product.description}}                    
                    </div>
-                   <form action="" method="post" accept-charset="utf-8">
-                     {% csrf_token %}
-                      <ul class="spe_ul"></ul>
-                      <div class="_p-qty-and-cart">
-                         <div class="_p-add-cart">
-                            <button class="btn-theme btn buy-btn" tabindex="0">
-                            <i class="fa fa-shopping-cart"></i> Buy Now
+                   {% comment %} <form action="" method="post" accept-charset="utf-8">
+                     {% csrf_token %} {% endcomment %}
+                     <ul class="spe_ul"></ul>
+                     <div class="_p-qty-and-cart">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
+                            <button class="btn-theme btn btn-custom text-white ml-2 buy-btn" tabindex="0">
+                                <i class="fa fa-shopping-cart"></i> Buy Now
                             </button>
-                            <button type="submit" class="btn-theme btn btn-primary" tabindex="0">
-                              <a href="/add-to-cart/{{product.id}}/" class="text-white">
-                                 <i class="fa fa-shopping-cart"></i> Add to cart
-                             </a>
-                            </button>
-                            <!-- Wishlist icon -->
-
-
-                            <input type="hidden" name="pid" value="18" />
-                            <input type="hidden" name="price" value="850" />
-                            <input type="hidden" name="url" value="" />   
-                         </div>
-                      </div>
-                   </form>
+                            <a href="/add-to-cart/{{product.id}}/" class="btn-theme btn btn-primary text-white ml-2" tabindex="0">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                            </a>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="/add_to_comparison/{{product.id}}/" class="btn btn-dark compare-button add-to-compare" data-product-id="{{ product.id }}">
+                                <i class="fa fa-exchange-alt"></i> Compare
+                            </a>
+                            <form action="/wishlist/{{product.id}}/" method="post" class="like-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success like-button {% if product.is_liked_by_user %}liked{% endif %}">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+                       
+                       
+                        <!-- Wishlist icon -->
+                        <input type="hidden" name="pid" value="18" />
+                        <input type="hidden" name="price" value="850" />
+                        <input type="hidden" name="url" value="" />
+                    </div>
+                    
+                 {% comment %} </form> {% endcomment %}
                 </div>
              </div>
           </div>
@@ -115,6 +131,10 @@
                             <i class="fa fa-shopping-cart"></i> Add to Cart
                           </a> 
                        </div>
+                       <!-- Add this code where you want to display the product comparison icon -->
+                    
+                      
+                    
                    </div>
                 </div>
                 {% endfor %}
@@ -156,5 +176,48 @@ document.addEventListener("DOMContentLoaded", function () {
    });
 });
 </script>
+
+<script>
+   $(document).ready(function () {
+       $('.like-form').on('submit', function (e) {
+           e.preventDefault();
+           console.log("Hello")
+           var form = $(this);
+           var likeButton = form.find('.like-button');
+           var heartIcon = likeButton.find('.fa-heart');
+           var productId = likeButton.data('product-id');
+           var productName = likeButton.data('product-name');
+           var message = '';
+   
+           $.ajax({
+               url: form.attr('action'),
+               type: form.attr('method'),
+               data: form.serialize(),
+               success: function () {
+                   if (heartIcon.hasClass('liked')) {
+                       heartIcon.removeClass('liked');
+                       likeButton.removeClass('btn-danger'); // Remove the red color class
+                       likeButton.addClass('btn-success'); // Add the green color class
+                       //message = productName + ' removed from your wishlist.';
+                       message = 'product removed from your wishlist.';
+                   } else {
+                       heartIcon.addClass('liked');
+                       likeButton.removeClass('btn-success'); // Remove the green color class
+                       likeButton.addClass('btn-danger'); // Add the red color class
+                       //message = productName + ' added to your wishlist.';
+                       message = 'product added to your wishlist.';
+                   }
+   
+                   // Display the message as a browser alert
+                   alert(message);
+               }
+           });
+       });
+   });
+   
+</script> 
+
+
+
       
  

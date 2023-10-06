@@ -5,6 +5,16 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/js
 // To allow for importing the .gltf file
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 const containerDiv = document.getElementById("container3D");
+let cursorInsideWindow = true;
+
+// Add mouse position listener to detect when the cursor leaves or enters the window
+containerDiv.addEventListener("mouseenter", () => {
+  cursorInsideWindow = true;
+});
+
+containerDiv.addEventListener("mouseleave", () => {
+  cursorInsideWindow = false;
+});
 const width = containerDiv.clientWidth; // Width of the container div
 const height = containerDiv.clientHeight; // Height of the container div
 //Create a Three.JS Scene
@@ -30,11 +40,12 @@ const loader = new GLTFLoader();
 
 //Load the file
 loader.load(
-  '/static/3d/apple/scene.gltf',
+  '/static/3d/iphone3.glb',
   function (gltf) {
     //If the file is loaded, add it to the scene
     
     object = gltf.scene;
+    object.scale.set(2, 2, 2);
     const bbox = new THREE.Box3().setFromObject(object);
     const center = new THREE.Vector3();
     bbox.getCenter(center);
@@ -83,7 +94,7 @@ function animate() {
   //Here we could add some code to update the scene, adding some automatic movement
 
   //Make the eye move
-  if (object && objToRender === "eye") {
+  if (cursorInsideWindow && object && objToRender === "eye") {
     //I've played with the constants here until it looked good 
     object.rotation.y = -3 + mouseX / width * 3;
     object.rotation.x = -1.2 + mouseY * 2.5 / height;

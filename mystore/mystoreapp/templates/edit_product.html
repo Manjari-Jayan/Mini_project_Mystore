@@ -22,6 +22,28 @@
 
                     <div class="col-sm-6">
                         <div class="form-group">
+                            <label>Product Subcategory</label>
+                            <select name="brand" class="form-control" required>
+                                <option value="">Choose Subcategory</option>
+                                {% for i in brand %}
+                                <option value="{{i.id}}" {% if i.id == product.brand.id %}selected{% endif %}>{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Series</label>
+                            <select name="series" class="form-control" required>
+                                <option value="">Choose Series</option>
+                                {% for i in series %}
+                                <option value="{{i.id}}" {% if i.id == product.series.id %}selected{% endif %}>{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
                             <label>Product Name</label>
                             <input type="text" name="name" class="form-control" value="{{product.name}}" placeholder="Category Name">
                         </div>

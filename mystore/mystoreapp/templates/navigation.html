@@ -321,7 +321,7 @@ padding: 5px 10px;
                     </a>
                 </li>
                 <li class="nav-item" style="margin-bottom: 2px;" >
-                    <a href="{% url 'product_comparison' 1 %}" class="nav-link">
+                    <a href="{% url 'product_comparison'  %}" class="nav-link">
                         <span style="color: white;">
                             <i class="fas fa-exchange-alt"></i> <!-- Icon -->
                         </span>
@@ -362,13 +362,13 @@ padding: 5px 10px;
 
 </nav> <!-- End Navigation -->
 {% block body %}{% endblock %}
-{% for i in messages %}
+{% comment %} {% for i in messages %}
 <script>
     alert('{{i}}');
 </script>
 
 
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 <script>
 
