@@ -43,7 +43,13 @@ class Product(models.Model):
     discount = models.CharField(max_length=100, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    stock = models.PositiveIntegerField(default=0)
 
+    processor = models.CharField(max_length=100, null=True, blank=True)
+    front_camera = models.CharField(max_length=100, null=True, blank=True)
+    back_camera = models.CharField(max_length=100, null=True, blank=True)
+    ram = models.CharField(max_length=100, null=True, blank=True)
+    rom = models.CharField(max_length=100, null=True, blank=True)
     def __str__(self):
         return self.name
     

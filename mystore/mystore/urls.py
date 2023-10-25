@@ -1,7 +1,7 @@
 
 from django import views
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from mystoreapp.views import *
 
 # from mystoreapp.views import  check_empty_wishlist, delete_series, edit_series, home,index,about,main, remove_from_wishlist, series_product, three, view_series, view_wishlist, wishlist
@@ -14,6 +14,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+ 
     path('', home, name="home"),
     path('index/', index, name="index"),
     path('three/', three, name="three"),
@@ -39,8 +40,10 @@ urlpatterns = [
     path('view-series/', view_series, name="view_series"),
     path('edit-series/<int:pid>/', edit_series, name="edit_series"),
     path('delete-series/<int:pid>/', delete_series, name="delete_series"),
-
-    path('search/', search_products, name='search_products'),
+    path('search-products/', search_products, name='search_products'),
+    
+    # path('search-autofill/', search_autofill, name='search_autofill'),
+    # path('search/', search_products, name='search_products'),
     # path('search-suggestions/', search_suggestions, name='search_suggestions'),
     path('registration/', registration, name="registration"),
     path('userlogin/', userlogin, name="userlogin"),

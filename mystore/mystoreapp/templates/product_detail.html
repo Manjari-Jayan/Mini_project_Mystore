@@ -13,6 +13,10 @@
       background-color: #fe0000; /* Change this to your desired color */
       color: #fff; /* Text color for contrast */
   }
+
+  
+
+  
 </style>
 <body>
 
@@ -39,15 +43,21 @@
                 </div>
              </div>
           </div>
+         
          <div class="col-md-6">
              <div class="_product-detail-content">
+                
                 <p class="_p-name product-name">{{product.name}} </p>
                 <div class="_p-price-box">
+                  
                    <div class="p-list">
+
                       <span> M.R.P. : <i class="fa fa-inr"></i> <del> {{product.price}}  </del>   </span>
-                      <span class="price"> Rs. {{product.id|applydiscount}} </span>
+                      <span class="price"> Rs. {{product.id | applydiscount}} </span>
                    </div>
                    <div class="_p-add-cart">
+                    <form action="{% url 'product_detail' product.id %}" method="post">
+                        {% csrf_token %}
                      <div class="_p-qty">
                          <span>Add Quantity</span>
                          <div class="value-button decrease_" id="decrease" value="Decrease Value">-</div>
@@ -60,6 +70,26 @@
                       <span> Description About this product:- </span>
                       {{product.description}}                    
                    </div>
+                   <div class="_p-features">
+                    <p> <b>Processor:</b> {{product.processor}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Front Camera:</b> {{product.front_camera}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Back Camera:</b> {{product.back_camera}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Ram:</b> {{product.ram}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Rom:</b> {{product.rom}}</p>                  
+                 </div>
+                   <div class="_p-qty">
+                    <span> Stock left:</span>
+                    {{product.stock}}                    
+                 </div>
+               
                    {% comment %} <form action="" method="post" accept-charset="utf-8">
                      {% csrf_token %} {% endcomment %}
                      <ul class="spe_ul"></ul>
@@ -68,14 +98,19 @@
                             <button class="btn-theme btn btn-custom text-white ml-2 buy-btn" tabindex="0">
                                 <i class="fa fa-shopping-cart"></i> Buy Now
                             </button>
+                        </form>
                             <a href="/add-to-cart/{{product.id}}/" class="btn-theme btn btn-primary text-white ml-2" tabindex="0">
                                 <i class="fa fa-shopping-cart"></i> Add to cart
                             </a>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <a href="/add_to_comparison/{{product.id}}/" class="btn btn-dark compare-button add-to-compare" data-product-id="{{ product.id }}">
+                            
+                            <a href="{% url 'add_to_comparison' product.id %}" class="btn btn-dark compare-button add-to-compare" data-product-id="{{ product.id }}">
                                 <i class="fa fa-exchange-alt"></i> Compare
                             </a>
+                            
+
+
                             <form action="/wishlist/{{product.id}}/" method="post" class="like-form">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-success like-button {% if product.is_liked_by_user %}liked{% endif %}">
@@ -143,6 +178,11 @@
        </div>
     </div>
 </section>
+<script>
+    {% for message in messages %}
+        alert("{{ message }}");
+    {% endfor %}
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
@@ -178,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
+@login_required
    $(document).ready(function () {
        $('.like-form').on('submit', function (e) {
            e.preventDefault();
@@ -216,6 +257,8 @@ document.addEventListener("DOMContentLoaded", function () {
    });
    
 </script> 
+
+
 
 
 

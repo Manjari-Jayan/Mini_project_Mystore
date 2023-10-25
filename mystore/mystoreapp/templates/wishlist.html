@@ -21,16 +21,20 @@
                       <div class="row w-100 mx-auto">
                         {% for item in wishlist_items %}
                           <div class="col-md-3">
-                            <div class="card" align="center" style="border:1px solid lightgrey">
-                              <img class="card-img-top img-thumbnail" src="{{ item.product.image.url }}" style="width:100%" alt="card-img">
+                            <div class="card" align="center" style="border:1px solid lightgrey ">
+                              <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                              <img class="card-img-top img-thumbnail" src="{{ item.product.image.url }}" style="max-height: 200px; max-width: 150px; align-items: center;" alt="card-img">
+                              </div>
                               <div class="card-body">
                                 <h6 class="card-title">
-                                  {{ item.product.name }} Rs.{{ item.product.price }}
+                                  {{ item.product.name }} ||{{ item.product.front_camera }}||{{ item.product.back_camera }}||{{ item.product.processor }}
+                                  ||{{ item.product.ram }}||{{ item.product.rom }}
                                 </h6>
                                 <p class="card-text" style="font-size:14px">
                                   {{ item.product.description }}
                                 </p>
-                    
+                                <p class="card-text" style="font-size:14px">
+                                Rs.{{ item.product.price }}</p>
                                 <div class="d-flex justify-content-center">
                                   <a href="/add-to-cart/{{ item.product.id }}/" class="text-white">
                                       <button type="submit" class="btn btn-primary btn-sm mr-2">

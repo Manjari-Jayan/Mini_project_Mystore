@@ -1,19 +1,38 @@
 {% include 'navigation.html' %}
 {% load static %}
 <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
-<div class="d-flex" id="wrapper">
-  <div class="bg-light border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading">
- Filter by category</div>
-      <div class="list-group list-group-flush">
-        <a href="{% url 'user_product' 0 %}" class="list-group-item list-group-item-action bg-light">
-All Product</a>
-        {% for i in allcategory %}
-          <a href="{% url 'user_product' i.id %}" class="list-group-item list-group-item-action bg-light">
-            {{i.name}}</a>
-        {% endfor %}
-      </div>
+<style>
+
+
+  .sidebar-heading:hover::before{
+    
+    }
+.sidebar-heading:hover{
+transform:translateX(-20px);
+}
+
+.list-group-item:hover{
+  
+  transform:translateX(-20px);
+}
+
+</style>
+<div class="d-flex" id="wrapper" >
+  <div class="bg-dark border-right" id="sidebar-wrapper" style="background:black; color:white;">
+    <div class="sidebar-heading " style="margin-left:-1rem;">
+        Filter by category
     </div>
+    <div class="list-group list-group-flush" >
+        <a href="{% url 'user_product' 0 %}" class="list-group-item list-group-item-action bg-dark" style="color:white; border-width:3px; margin-left: 0rem;">
+            All Product
+        </a>
+        {% for i in allcategory %}
+            <a href="{% url 'user_product' i.id %}" class="list-group-item list-group-item-action bg-dark" style="color:white; border-width:3px; margin-left: 0rem;" >
+                {{i.name}}
+            </a>
+        {% endfor %}
+    </div>
+</div>
  
     <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -31,8 +50,10 @@ View {{category.name}} Product</h4>
                 {% for j in product %}                   
                 <div class="col-md-3">
                     <div class="card" align="center" style="border:1px solid lightgrey">
-                        <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%" alt="card-img">
-                        <div class="card-body">
+                      <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                        <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="max-height: 200px; max-width: 150px;" alt="card-img">
+                    </div>                        
+                    <div class="card-body">
                           <h6 class="card-title">
                     {{j.name}} Rs.{{j.price}}</h6>
                           <p class="card-text" style="font-size:14px">

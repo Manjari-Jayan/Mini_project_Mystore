@@ -2,6 +2,8 @@
 {% load static %}
 {% block body %}
 <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
             <style>
                 .swiper{
@@ -73,6 +75,36 @@
                 
                 }
             </style>
+
+            <style>
+
+                .custom-toast-class {
+                    background-color: rgba(0, 128, 0, 1);  color:white; /* Text color */
+                  border-radius: 8px; /* Border radius */
+                  max-width: 250px;
+                  opacity: 1 !important;
+                  
+                
+                }
+            
+                </style>
+
+            <script>
+                $(document).ready(function() {
+                  // Check if there are any messages in the Django messages framework
+                  {% if messages %}
+                    {% for message in messages %}
+                      // Display a toastr notification for each message
+                      toastr.success("{{ message }}", '', {
+                        positionClass: 'toast-top-center', // Set position to top center
+                        progressBar: true, // Display a progress bar
+                        closeButton: true, // Display a close button
+                        toastClass: 'custom-toast-class',
+                      });
+                    {% endfor %}
+                  {% endif %}
+                });
+              </script>
 <div class="swiper" style="object-fit: cover;">
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
@@ -107,70 +139,233 @@
 
    
 </div>
-<br>
-<center><h6 >Top Deals</h6> </center>
+<br><br>
+
+<center><h1>This Week’s Highlights</h1></center>
+<div class="swiper right-container" style="object-fit: cover; width:50%; height:50%;">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide">
+            <img src="{% static 'images/op.jpg' %}" alt="" />
+            
+        </div>
+        <div class="swiper-slide">        
+            <img src="{% static 'images/sm.jpg' %}" alt="" />
+        </div>
+        <div class="swiper-slide">     
+            <img src="{% static 'images/red2.jpg' %}" alt="" />
+        </div>
+        <div class="swiper-slide"> 
+            <img src="{% static 'images/sm.jpg' %}" alt="" />
+        </div>
+    </div>
+     <!-- If we need pagination -->
+     <div class="swiper-pagination"></div>
+
+     <!-- If we need navigation buttons -->
+     <div class="swiper-button-prev"></div>
+     <div class="swiper-button-next"></div>
+ 
+     <!-- If we need scrollbar -->
+     <div class="swiper-scrollbar"></div>
+</div>
+
+   
+</div>
+
+<br><br>
+  
+<center><h3>Recommended Products</h3> </center>
 
 
-<div class="container-fluid mt-2">
-    <div class="container-fluid">
-        <div class="row w-100 mx-auto">         
-                {% for j in products %}
-                <div class="col-md-3">
-                    <div class="card" align="center" style="border:1px solid lightgrey">
-                        <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                            <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="max-height: 200px; max-width: 150px;" alt="card-img">
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                {{j.name}} 
-                            </h6>
-                            <h6 class="card-title">
-                                 Rs.{{j.price}}
-                            </h6>
-                            {% comment %} <p class="card-text" style="font-size:14px">
-                                {{j.description}}
-                            </p> {% endcomment %}
-                            <div class="d-flex justify-content-center">
-                                {% comment %} <a href="/add-to-cart/{{j.id}}/" class="text-white">
-                                    <button type="submit" class="btn btn-primary mr-2">
-                                        <i class="fa fa-shopping-cart"></i>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-1">
+            <button class="btn btn-primary" id="prevBtn">&#8592;</button>
+        </div>
+        <div class="col-10">
+            <div class="product-carousel-container">
+                <div class="product-carousel">
+                    {% for j in products %}
+                    <div class="product-item">
+                        <div class="card" align="center" style="border: 1px solid lightgrey; width: 200px; height: 310px;">
+                            <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="max-height: 200px; max-width: 150px;" alt="card-img">
+                            </div>
+                            <a href="/product-detail/{{j.id}}/" style="color:black; display: flex; flex-direction: column;justify-content: space-between;text-align: center;">
+
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    {{j.name}} || {{j.front_camera}}||{{j.back_camera}}
+                                </h6>
+                                <h6 class="card-title">
+                                     Rs.{{j.price}}
+                                </h6></a>
+                                <!-- Commented out description -->
+                                <!-- <p class="card-text" style="font-size:14px">
+                                    {{j.description}}
+                                </p> -->
+                                <div class="d-flex justify-content-center">
+                                    <!-- Commented out shopping cart button -->
+                                    <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                                        <button type="submit" class="btn btn-primary mr-2">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button>
+                                    </a> 
+<!-- For Now -->
+
+                                    {% comment %} <a href="/product-detail/{{j.id}}/" class="text-white" >
+                                        <button type="submit" class="btn btn-danger mr-2">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </a>
+                                    <a href="/add_to_comparison/{{j.id}}/" class="text-white">
+                                    <button type="button" class="btn btn-primary mr-2 compare-button add-to-compare" data-product-id="{{ j.id }}" style="width: 36px; height: 32px;">
+                                        <i class="fa fa-exchange-alt"></i>
                                     </button>
-                                </a> {% endcomment %}
-                                <a href="/product-detail/{{j.id}}/" class="text-white">
-                                    <button type="submit" class="btn btn-danger mr-2">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                </a>
-                               
-                                <a href="/add_to_comparison/{{j.id}}/" class="text-white">
-                                <button type="button" class="btn btn-primary mr-2 compare-button add-to-compare" data-product-id="{{ j.id }}" style="width: 36px; height: 32px;">
-                                    <i class="fa fa-exchange-alt"></i>
-                                </button>
-                                </a>
-                               
-                                <form action="/wishlist/{{j.id}}/" method="post" class="like-form">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success like-button {% if j.is_liked_by_user %}liked{% endif %}">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-                                </form>
-                                <!-- Hidden pop-up message div -->
+                                    </a>
+                                    <form action="/wishlist/{{j.id}}/" method="post" class="like-form" id="">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success like-button {% if j.is_liked_by_user %}liked{% endif %}">
+                                            <i class="fa fa-heart"></i>
+                                        </button>
+                                    </form> {% endcomment %}
 
-
+                                    <!-- Hidden pop-up message div -->
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            {% comment %} <img src="{% static 'images/empty.jpg' %}" /> {% endcomment %}
+            </div>
+        </div>
+        <div class="col-1">
+            <button class="btn btn-primary" id="nextBtn">&#8594;</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var currentIndex = 0;
+        var items = $(".product-item");
+
+        function showItems(index) {
+            items.hide();
+            items.slice(index, index + 4).show();
+        }
+
+        showItems(currentIndex);
+
+        $("#nextBtn").click(function() {
+            if (currentIndex < items.length - 4) {
+                currentIndex += 4;
+                showItems(currentIndex);
+            }
+        });
+
+        $("#prevBtn").click(function() {
+            if (currentIndex > 0) {
+                currentIndex -= 4;
+                showItems(currentIndex);
+            }
+        });
+    });
+</script>
+
+                <style>
+                    .product-carousel-container {
+                        overflow: hidden;
+                    }
+            
+                    .product-carousel {
+                        display: flex;
+                        overflow-x: scroll;
+                        padding: 10px; /* Add some spacing between items */
+                    }
+            
+                    .product-item {
+                        flex: 0 0 25%;
+                        padding: 10px;
+                    }
+            
+                    /* Add CSS for the black box footer */
+                    footer {
+                        background: #000;
+                        color: #fff;
+                        padding: 20px 0;
+                    }
+                
+                    /* Style the columns for the left and right sections */
+                    .footer-columns {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                    }
+                
+                    .footer-column {
+                        flex: 1;
+                        margin: 10px;
+                    }
+                </style>
+                
+                <footer>
+                    <div class="container">
+                        <div class="footer-columns">
+                            <div class="footer-column">
+                                <div class="logo">
+                                    <!-- Add your logo here -->
+                                </div>
+                                <h4> Contact Details</h4>
+                                <ul>
+                                    <li><a href="#">Kakkand, Kochi, Kerala</a></li>
+                                    <li><a href="#">techtrove@gmail.com</a></li>
+                                    <li><a href="#">91952 662 5155</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-column">
+                                <h4>Shopping & Categories</h4>
+                                <ul>
+                                    <li><a href="#">Smartphones</a></li>
+                                    <li><a href="#">Basicphones</a></li>
+                                    <li><a href="#">Accessories</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-column">
+                                <h4>Useful Links</h4>
+                                <ul>
+                                    <li><a href="#">Homepage</a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Help</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-column">
+                                <h4>Help & Information</h4>
+                                <ul>
+                                    <li><a href="#">Help</a></li>
+                                    <li><a href="#">FAQ's</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Tracking ID</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="under-footer">
+                            <center><p >Copyright © 2023 TechTrove Co., Ltd.</p></center>
+                            {% comment %} <ul>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                            </ul> {% endcomment %}
                         </div>
                     </div>
-                </div>
-               
-                {% endfor %}
+                </footer>
+                
         </div>
     </div>
 </div>
@@ -182,6 +377,7 @@
     
     <!-- JavaScript/jQuery for updating the like button color and displaying the pop-up message -->
     <script>
+    
     $(document).ready(function () {
         $('.like-form').on('submit', function (e) {
             e.preventDefault();

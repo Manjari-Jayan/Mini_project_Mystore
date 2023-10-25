@@ -42,15 +42,19 @@
         // Validate the category name using JavaScript
         var categoryRegex = /^[A-Z][a-z]*(?:\s[A-Z][a-z]*)*$/; // Validation pattern
 
+        if (!categoryInput.value.trim()) {
+            categoryError.textContent = 'Category Name is required.';
+            return false;
+        }
+
         if (!categoryRegex.test(categoryInput.value)) {
             categoryError.textContent = 'Invalid category name format. Follow the rules: First letter capital, rest lowercase, first letter after spaces capital, no numbers.';
             return false;
         }
 
         return true;
-
-        
     }
+
     function clearMessages() {
         var categoryError = document.getElementById('categoryError');
         categoryError.textContent = ''; // Clear the error message
@@ -63,6 +67,6 @@
             errorMessage.textContent = ''; // Clear the error message
         }
     }
-   
 </script>
+
 {% endblock %}

@@ -79,10 +79,11 @@ label{
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Upload PIC</label>
-                            <input type="file" name="image" class="form-control">
+                            <input type="file" name="image" id="image-upload" class="form-control">
                             <p class="error-class" id="image-error"></p>
                         </div>
                     </div>
+                    
 
                     <div class="col-sm-12">
                         <div class="form-group">
@@ -180,24 +181,42 @@ label{
                 isValid = false;
             }
         
-            if (image) {
-                var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-                
+            
+        }
+        </script>
+
+        <script>
+            function checkpass() {
+                // ... (your existing validation code)
         
-                if (!image.match(allowedExtensions)) {
-                    document.getElementById("image-error").innerHTML = "Invalid file format. Please upload a JPEG, PNG, or GIF image.";
+                var image = document.forms["signup"]["image"].value;
+        
+                // Reset error message
+                document.getElementById("image-error").innerHTML = "";
+        
+                var isValid = true;
+        
+                // Check the file extension
+                if (!isValidImageType(image)) {
+                    document.getElementById("image-error").innerHTML = "Only JPEG (jpg, jpeg) or PNG images are allowed.";
                     isValid = false;
                 }
         
-                
-            } else {
-                document.getElementById("image-error").innerHTML = "Image is required.";
-                isValid = false;
+                // ...
             }
-            
-            return isValid;
-        }
+        
+            function isValidImageType(filename) {
+                // Regular expression to check for allowed image extensions
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        
+                // Check if the filename matches the allowed extensions
+                return allowedExtensions.test(filename);
+            }
         </script>
+        
+
+
+        
 </html>
 
     

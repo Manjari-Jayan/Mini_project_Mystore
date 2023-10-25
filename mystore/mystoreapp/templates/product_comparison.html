@@ -1,58 +1,97 @@
 {% extends 'navigation.html' %}
 {% load static %}
 {% block body %}
+
+    
 <h3>Compared Products</h3>
-    <div class="container-fluid mt-2">
-        <div class="container-fluid">
-            <div class="row w-100 mx-auto">
-                {% for product in selectedProducts %}
-                        <div class="col-md-3">
-                            <div class="card" align="center" style="border: 1px solid lightgrey">
-                                <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                                    <img class="card-img-top img-thumbnail" src="{{ product.image.url }}" style="max-height: 200px; max-width: 150px;" alt="card-img">
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">
-                                        {{ product.name }} Rs.{{ product.price }}
-                                    </h6>
-                                    <p class="card-text" style="font-size: 14px">
-                                        {{ product.description }}
-                                    </p>
-                                    <div class="d-flex justify-content-center">
-                                        <!-- Add your comparison-specific content here -->
-                                    </div>
+<div class="container-fluid mt-2">
+    <div class="container-fluid">
+        <div class="row w-100 mx-auto">
+            <div class="comparison-table-container">
+                <table class="table table-bordered">
+                    <thead></thead>
+                <tbody>
 
-                                    <a href="{% url 'remove_from_comparison' product.id %}" class="text-white remove-from-comparison">
-                                        <button type="button" class="btn btn-danger btn-sm mr-2" style="font-size: 18.5px; padding: 5px 10px;">
-                                            <i class="fas fa-trash" style="font-size: 18.5px;"></i> 
-                                        </button>
-                                    </a>
-                           
+                    <tr>
+                        <td><b>Image</b></td>
+                        {% for product in selectedProducts %}
+                        <td>
+                            <img src="{{ product.image.url }}" alt="Product Image" style="max-width: 150px; max-height: 200px;">
+                        </td>
+                        {% endfor %}
+                    </tr>
 
-                                </div>
-                            </div>
-                        </div>
-                {% empty %}
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <!-- No products selected for comparison -->
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+                    <tr>
+                        <td><b>Name</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.name }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr>
+                        <td><b>Description</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.description }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Processor</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.processor }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Front Camera</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.front_camera }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Back Camera</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.back_camera }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>RAM</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.ram }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>ROM</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.rom }}</td>
+                        {% endfor %}
+                    </tr>  
+                    <tr >
+                        <td><b></b></td>
+                        {% for product in selectedProducts %}
+                        <td><a href="{% url 'remove_from_comparison' product.id %}" class="text-white remove-from-comparison">
+                            <button type="button" class="btn btn-danger btn-sm mr-2" style="font-size: 18.5px; padding: 5px 10px;">
+                                <i class="fas fa-trash" style="font-size: 18.5px;"></i> 
+                            </button>
+                        </a></td>
+                        {% endfor %}
+                    </tr>
+                    
+                        
+                        <!-- Add more table cells for additional product attributes -->
+                    
+                    
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <!-- Add any other HTML structure or content for the comparison page as needed -->
-    {% comment %} <div id="compared-products">
-        <h3>Compared Products:</h3>
-        <ul id="comparison-list">
-            <!-- Comparison results will be displayed here -->
-        </ul>
-    </div> {% endcomment %}
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}
+
+
 
 
     {% comment %} <script>

@@ -2,8 +2,9 @@ from django.contrib import admin
 from .models import Carousel, Cart, ComparisonList, WishlistItem
 from .models import Category, Subcategory, Series
 from .models import UserProfile
-
 from .models import Product
+
+
 admin.site.register(Product)
 # admin.site.register(SubProduct)
 admin.site.register(Category)
