@@ -9,50 +9,110 @@
         <h2 style="font-family:roman;font-size:bold">
             My Cart
             <a href="/user-product/0/" class="btn btn-warning " style="float:right">Continue Shopping</a>   
-            <a href="#" class="btn btn-info mr-2" style="float:right">Buy Now</a>
+            {% comment %} <a href="#" class="btn btn-info mr-2" style="float:right">Buy Now</a> {% endcomment %}
         <h2>
-        <table class="table table-bordered" style="width: 100%">
-            <thead>
+<table class="table table-bordered" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>        
+            <th></th>
+            <th>Delete</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% comment %} {% for product in products %}
+            <tr>
+                <td>
+                    <img class="img-thumbnail" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px">
+                </td>
+                <td><a href="/product-detail/{{ product.id }}/">{{ product.name }}</a></td>
+                <td>Rs.{{ product.price }}</td>
+                <td style="width: 15%">
+                    <div class="input-group">
+                        <a href="/incredecre/{{ product.id }}/?action=decre" class="btn btn-warning pull-left" data-product-id="{{ product.id }}">-</a>
+                        <input type="text" class="cart-plus-minus-box" style="width: 30%; border: 1px solid grey" id="shop_qty-{{ forloop.counter }}" name="qtybutton" value="1" readonly/>
+                        <a href="/incredecre/{{ product.id }}/?action=incre" class="btn btn-warning pull-right" data-product-id="{{ product.id }}">+</a>
+                    </div>
+                </td>
+                
+                <td>
+                    <a href="/deletecart/{{ product.id }}/" class="btn btn-danger"><i class="fa fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="4"></td> {% endcomment %}
+
+            {% comment %} <td colspan="2" id="total-price">Rs.{{ total_price }}</td> {% endcomment %}
+
+        {% comment %} </tr>
+    </tbody>
+</table> {% endcomment %}
+
+
+{% comment %} <script>
+    const decreaseButtons = document.querySelectorAll('.btn[data-product-id][data-action="decre"]');
+    const increaseButtons = document.querySelectorAll('.btn[data-product-id][data-action="incre"]');
+    const quantityInputs = document.querySelectorAll('input.cart-plus-minus-box');
+
+    decreaseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-product-id');
+            const quantityInput = document.querySelector(`input#shop_qty-${productId}`);
+            let currentQuantity = parseInt(quantityInput.value);
+            
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                quantityInput.value = currentQuantity;
+            }
+        });
+    });
+
+    increaseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-product-id');
+            const quantityInput = document.querySelector(`input#shop_qty-${productId}`);
+            let currentQuantity = parseInt(quantityInput.value);
+            
+            currentQuantity++;
+            quantityInput.value = currentQuantity;
+        });
+    });
+</script> {% endcomment %}
+
+
+{% for i, j in product.items %}
                 <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th>Delete</th>
+                    <td>
+                        <img class="img-thumbnail" src="{{i|productimage}}" alt="product" style="width:100px;height:100px"></a>
+                    </td>
+                    <td><a href="/product-detail/{{i}}/">{{i|productname}}</a></td>
+                    <td>{{i|productprice}}</td>
+                    <td style="width:15%">
+                        <div class="input-group">
+                            <a href="/incredecre/{{i}}/?action=decre" class="btn btn-warning pull-left" id="decrebtn-{{forloop.counter}}">-</a>
+                            <input type="text" class="cart-plus-minus-box" type="text" style="width:30%;border:1px solid grey" id="shop_qty-{{forloop.counter}}" name="qtybutton" value="{{j}}" readonly/>
+                            <a href="/incredecre/{{i}}/?action=incre" class="btn btn-warning pull-right">+</a>
+                        </div>
+                    </td>
+                    <td id="totalprice-{{forloop.counter}}">{% producttotalprice i j %}</td>
+                    <td>
+                        <a href="/deletecart/{{i}}/" class="btn btn-danger"><i class="fa fa-trash-alt"></i></a>
+                    </td>
+                    <td><a href="" class="btn btn-info mr-2" style="float:right">Buy Now</a></td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for i, j in cart_items.items %}
-                    <tr>
-                        <td>
-                            <img class="img-thumbnail" src="{{i|productimage}}" alt="product" style="width:100px;height:100px">
-                        </td>
-                        <td><a href="/product-detail/{{i}}/">{{i|productname}}</a></td>
-                        <td>{{i|productprice}}</td>
-                        <!-- Add other columns for quantity, total, and delete as needed -->
-                    </tr>
-                    <tr>
-                        <td style="width:15%">
-                            <div class="input-group">
-                                <a href="/incredecre/{{i}}/?action=decre" class="btn btn-warning pull-left" id="decrebtn-{{forloop.counter}}">-</a>
-                                <input type="text" class="cart-plus-minus-box" type="text" style="width:30%;border:1px solid grey" id="shop_qty-{{forloop.counter}}" name="qtybutton" value="{{j}}" readonly/>
-                                <a href="/incredecre/{{i}}/?action=incre" class="btn btn-warning pull-right">+</a>
-                            </div>
-                        </td>
-                        <td id="totalprice-{{forloop.counter}}">{% producttotalprice i j %}</td>
-                        <td>
-                            <a href="/deletecart/{{i}}/" class="btn btn-danger"><i class="fa fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
                 {% endfor %}
                 <tr>
                     <td colspan="4"></td>
                     <td colspan="2" id="total-price"></td>
                 </tr>
             </tbody>
-            
         </table>
+        <a href="{% url "booking" %}" class="btn btn-info mr-2" style="float:right">Proceed to Checkout</a>
     </div>
 </div>
 

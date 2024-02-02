@@ -96,6 +96,7 @@ label{
                 </div>
                 <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary" >
             </form>
+            {% comment %} <p id="signupelement2"><a href="{% url 'regdelivery' %}" style="color: #27350F; text-decoration: none">Apply for Delivery agent</a></p> {% endcomment %}
         </div>
     </div>
 </div>
@@ -215,7 +216,25 @@ label{
         </script>
         
 
-
+        <script>
+            $(document).ready(function() {
+              // Check if there are any messages in the Django messages framework
+              {% if messages %}
+                {% for message in messages %}
+                  // Display a toastr notification for each message
+                  toastr.success("{{ message }}", '', {
+                    positionClass: 'toast-top-center', // Set position to top center
+                    progressBar: true, // Display a progress bar
+                    closeButton: true, // Display a close button
+                    toastClass: 'custom-toast-class',
+                  });
+                {% endfor %}
+              {% endif %}
+            });
+          </script>
+          <div id="popup-message" class="alert alert-success" style="display: none;">
+            <strong></strong>
+        </div>
         
 </html>
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Carousel, Cart, ComparisonList, WishlistItem
+from .models import Booking, Carousel, Cart, ComparisonList, WishlistItem, DeliveryAgent
 from .models import Category, Subcategory, Series
 from .models import UserProfile
 from .models import Product
@@ -15,3 +15,5 @@ admin.site.register(UserProfile)
 admin.site.register(Cart)
 admin.site.register(WishlistItem)
 admin.site.register(ComparisonList)
+admin.site.register(Booking)
+admin.site.register(DeliveryAgent)

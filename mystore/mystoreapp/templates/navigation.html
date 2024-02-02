@@ -262,10 +262,7 @@ padding: 5px 10px;
         </div>
     </div>
            
-    </div>
-
-
-        
+    </div>     
         <div class="collapse navbar-collapse text-center" id="myMenu" >
             <ul class="navbar-nav pl-5 custom-nav ml-auto">
                 <li class="nav-item "><a href="{% url "home" %}" class="nav-link "><span style="color: white;"><i class="fas fa-home"></i></span>
@@ -306,12 +303,17 @@ padding: 5px 10px;
                         </span>
                     </a>
                 </li>
-                <li class="nav-item">
-                        <span style="color: white;"  id="wi">
-                            <a href="/view_wishlist/" class="nav-link" >
-                            <i class="fa fa-heart"></i> <br> </a>
-                            <small>Wishlist</small> <!-- Replace with your subscript text -->
+                
+
+                <li class="nav-item" style="margin-bottom: 2px;" >
+                    <a href="{% url 'view_wishlist'  %}" class="nav-link" >
+                        <span style="color: white;">
+                            <i class="fa fa-heart"></i> <!-- Icon -->
                         </span>
+                        {% comment %} <span style="color: white;"><small>Product</small></span> {% endcomment %}
+                        <br>
+                        <span style="color: white;"><small>Wishlist</small></span> <!-- Subscript Text -->
+                    </a>
                 </li>
                 <li class="nav-item" style="margin-bottom: 2px;" >
                     <a href="{% url 'product_comparison'  %}" class="nav-link" >
@@ -332,11 +334,12 @@ padding: 5px 10px;
                 {% comment %} <li class="nav-item"><a href="" class="nav-link">Feedback</a></li> {% endcomment %}
                 
                 
-                
+                <li class="nav-item"><a href="/my-order/" class="nav-link">
+                    <span style="color: white;"><small>My Order</a></small> </span></li>
                 <li class="nav-item">
                     <a href="/view_wishlist/" class="nav-link">
                         <span style="color: white;">
-                            <i class="fa fa-heart"></i> <br>
+                            <i class="fa fa-heart" style="color: white;" id="wi"></i> <br>
                             <small>Wishlist</small> <!-- Replace with your subscript text -->
                         </span>
                     </a>
@@ -350,8 +353,7 @@ padding: 5px 10px;
                         <br>
                         <span style="color: white;"><small>Comparison</small></span> <!-- Subscript Text -->
                     </a>
-                </li>
-                
+                </li>               
                 <li class="nav-item">
                     <a href="/cart/" class="nav-link">
                         <span style="color: white;">
@@ -359,9 +361,7 @@ padding: 5px 10px;
                             <small>Cart</small> <!-- Replace with your subscript text -->
                         </span>
                     </a>
-                </li>
-                
-               
+                </li>              
                 <li class="nav-item dropdown">
                     <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
