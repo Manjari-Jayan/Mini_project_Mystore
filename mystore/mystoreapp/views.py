@@ -64,6 +64,8 @@ def main(request):
     allcategory = Category.objects.all()
     return render(request, 'index.html', locals())
 
+# def delivery_agent(request):
+#     return render(request, 'view_assigned_orders.html')
 
 # <------------------------------------------------Category------------------------
 
@@ -941,20 +943,29 @@ def userlogin(request):
         user = authenticate(username=username, password=password)
         
         if user:
-            if user.is_staff:
+            if user.is_staff and user.is_superuser:
                 login(request, user)
                 messages.success(request, "Admin login successful")
                 return redirect('admindashboard')
-            else:
+            elif user.is_staff:
                 login(request, user)
                 messages.success(request, "DA login successful")
                 return redirect('delivery_agent')
+            else:
+                login(request, user)
+                return redirect('home')
+            # else:
+            #     login(request, user)
+            #     messages.success(request, "DA login successful")
+            #     return redirect('delivery_agent')
         else:
             messages.error(request, "Invalid Credentials")
 
     return render(request, 'login.html')
-
-
+    
+@login_required
+def delivery_agent(request):   
+    return render(request, 'view_assigned_orders.html', locals())
 
 
 @login_required
@@ -1380,6 +1391,7 @@ def add_da(request):
         # Create user
         user = User.objects.create_user(username=email, email=email, password=password)
         user.first_name = agent_name
+        user.is_staff = True
         user.save()
 
         # Create delivery agent

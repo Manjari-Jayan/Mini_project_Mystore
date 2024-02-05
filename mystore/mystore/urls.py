@@ -81,8 +81,8 @@ urlpatterns = [
     path('payment/', payment, name="payment"),
     path('manage-order/', manage_order, name="manage_order"),
     path('delete-order/<int:pid>/', delete_order, name="delete_order"),
-
-
+    path('delivery_agent/', delivery_agent, name='delivery_agent'),
+    
 
     path('add_da/', add_da, name='add_da'),
     path('view_da/', view_da, name='view_da'),
