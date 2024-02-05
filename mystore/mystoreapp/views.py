@@ -899,7 +899,7 @@ def registration(request):
         else:
             # Create a new user if the email is unique
             user = User.objects.create_user(username=email, first_name=fname, last_name=lname, email=email, password=password, mobile=mobile)
-            UserProfile.objects.create(user=user, address=address, image=image)
+            UserProfile.objects.create(user=user, mobile=mobile, address=address, image=image)
             messages.success(request, "Registration Successful")
             return redirect('userlogin')
     return render(request, 'registration.html', locals())
@@ -949,15 +949,12 @@ def userlogin(request):
                 return redirect('admindashboard')
             elif user.is_staff:
                 login(request, user)
-                messages.success(request, "DA login successful")
+                messages.success(request, "Delivery Agent login successful")
                 return redirect('delivery_agent')
             else:
                 login(request, user)
                 return redirect('home')
-            # else:
-            #     login(request, user)
-            #     messages.success(request, "DA login successful")
-            #     return redirect('delivery_agent')
+            
         else:
             messages.error(request, "Invalid Credentials")
 

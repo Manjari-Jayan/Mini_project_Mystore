@@ -9,7 +9,7 @@
                 <thead>
                 <tr>
                     <th>S.No.</th>
-                    <th>Image</th>
+                    {% comment %} <th>Image</th> {% endcomment %}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
@@ -20,7 +20,7 @@
                 {% for i in user %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td><img src="{{i.image.url}}" style="width:80px;height:80px"/></td>
+                    {% comment %} <td><img src="{{i.image.url}}" style="width:80px;height:80px"/></td> {% endcomment %}
                     <td>{{i.user.first_name}} {{i.user.last_name}}</td>
                     <td>{{i.user.username}}</td>
                     <td>{{i.mobile}}</td>
