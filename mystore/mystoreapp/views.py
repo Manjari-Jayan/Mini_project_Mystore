@@ -902,25 +902,58 @@ def registration(request):
             return redirect('userlogin')
     return render(request, 'registration.html', locals())
 
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+# def userlogin(request):
+#     if request.user.is_authenticated:
+#         return redirect('home')
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(username=username, password=password)
+#         if user:
+#             if(user.is_staff):
+#                 login(request, user)
+#                 messages.success(request, "User login successfully")
+#                 return redirect('admindashboard')
+#             else:
+#                 login(request, user)
+#                 return redirect('home')
+#         else:
+#             messages.success(request,"Invalid Credentials")
+#     return render(request, 'login.html', locals())
+
+
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.urls import reverse
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def userlogin(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+        
         if user:
-            if(user.is_staff):
+            if user.is_staff:
                 login(request, user)
-                messages.success(request, "User login successfully")
+                messages.success(request, "Admin login successful")
                 return redirect('admindashboard')
             else:
                 login(request, user)
-                return redirect('home')
+                messages.success(request, "DA login successful")
+                return redirect('delivery_agent')
         else:
-            messages.success(request,"Invalid Credentials")
-    return render(request, 'login.html', locals())
+            messages.error(request, "Invalid Credentials")
+
+    return render(request, 'login.html')
+
 
 
 
