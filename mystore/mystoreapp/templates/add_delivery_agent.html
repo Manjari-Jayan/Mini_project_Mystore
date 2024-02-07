@@ -1,0 +1,28 @@
+<!-- your_template_name.html -->
+
+{% extends 'admin_base.html' %}
+{% block main %}
+
+    <h2>Add Staff</h2>
+
+    {% for message in messages %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    <form method="post" action="{% url 'add_staff' %}">
+        {% csrf_token %}
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <button type="submit">Add Staff</button>
+    </form>
+
+
+{% endblock %}

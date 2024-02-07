@@ -1,0 +1,241 @@
+{% load static %}
+<html>
+<head>
+   
+        
+
+   
+
+</head>
+<body>
+{% include 'navigation.html' %}
+<hr class="mt-0">
+<style>
+.error-class{
+    color:red;
+}
+label{
+    color:black;
+}
+</style>
+<div class="card shadow m-5" id="signupform">
+    <div class="card-body">
+
+        <div class="container-fluid">
+            <h5 class="p-2" style="border-bottom: 2px solid orange;color:green">Create an Account</h5>
+            <form method="POST" name="signup" onsubmit="return checkpass();" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="fname" name="fname" placeholder="Enter First Name" class="form-control">
+                            <p class="error-class" id="fname-error"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text"  name="lname" placeholder="Enter Last Name" class="form-control">
+                            <p class="error-class" id="lname-error"></p>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Email ID</label>
+                            <input type="email" name="email" placeholder="Email Address" required class="form-control">
+                            <p class="error-class" id="email-error"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Contact</label>
+                            <input type="text" name="mobile" placeholder="Contact Number" required
+                                   class="form-control">
+                                   <p class="error-class" id="mobile-error"></p>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Enter Password" class="form-control">
+                            <p class="error-class" id="password-error"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" name="cpwd" placeholder="Enter Password Again" class="form-control">
+                            <p class="error-class" id="cpwd-error"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Upload PIC</label>
+                            <input type="file" name="image" id="image-upload" class="form-control">
+                            <p class="error-class" id="image-error"></p>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea name="address" class="form-control" placeholder="Full Address"></textarea>
+                            <p class="error-class" id="address-error"></p>
+                        </div>
+                    </div>
+
+                </div>
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary" >
+            </form>
+            {% comment %} <p id="signupelement2"><a href="{% url 'regdelivery' %}" style="color: #27350F; text-decoration: none">Apply for Delivery agent</a></p> {% endcomment %}
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    {% comment %} function checkpass()
+    {
+        if(document.signup.pwd.value!=document.signup.cpwd.value)
+        {
+            alert('Password and Repeat Password field does not match');
+            document.signup.cpwd.focus();
+            return false;
+        }
+        return true;
+    } {% endcomment %}
+    
+        function checkpass() {
+            console.log(document.forms["signup"]["fname"].value);
+            
+            console.log(document.forms["signup"]["fname"].value);
+
+            var fname = document.forms["signup"]["fname"].value;
+            var lname = document.forms["signup"]["lname"].value;
+            var email = document.forms["signup"]["email"].value;
+            var mobile = document.forms["signup"]["mobile"].value;
+            var password = document.forms["signup"]["password"].value;
+            var cpwd = document.forms["signup"]["cpwd"].value;
+            var address = document.forms["signup"]["address"].value;
+            var image = document.forms["signup"]["image"].value;
+        
+            // Regular expressions for validation
+            var nameRegex = /^[A-Za-z]+$/;
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            var mobileRegex = /^\d{10}$/;
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        
+            // Reset error messages
+
+            document.getElementById("fname-error").innerHTML = "";
+            document.getElementById("lname-error").innerHTML = "";
+            document.getElementById("email-error").innerHTML = "";
+            document.getElementById("mobile-error").innerHTML = "";
+            document.getElementById("password-error").innerHTML = "";
+            document.getElementById("cpwd-error").innerHTML = "";
+            document.getElementById("address-error").innerHTML = "";
+            document.getElementById("image-error").innerHTML = "";
+         
+            var isValid = true;
+        
+            if (!fname.match(nameRegex)) {
+                document.getElementById("fname-error").innerHTML = "First name is not valid.";
+                isValid = false;
+            }
+        
+            if (!lname.match(nameRegex)) {
+                document.getElementById("lname-error").innerHTML = "Last name is not valid.";
+                isValid = false;
+            }
+        
+            if (!email.match(emailRegex)) {
+                document.getElementById("email-error").innerHTML = "Email is not valid.";
+                isValid = false;
+            }
+        
+            if (!mobile.match(mobileRegex)) {
+                document.getElementById("mobile-error").innerHTML = "Mobile number is not valid.";
+                isValid = false;
+            }
+        
+            if (!password.match(passwordRegex)) {
+                document.getElementById("password-error").innerHTML = "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.";
+                isValid = false;
+            }
+        
+            if (password !== cpwd) {
+                document.getElementById("cpwd-error").innerHTML = "Passwords do not match.";
+                isValid = false;
+            }
+        
+            if (!address) {
+                document.getElementById("address-error").innerHTML = "Address is required.";
+                isValid = false;
+            }
+        
+            
+        }
+        </script>
+
+        <script>
+            function checkpass() {
+                // ... (your existing validation code)
+        
+                var image = document.forms["signup"]["image"].value;
+        
+                // Reset error message
+                document.getElementById("image-error").innerHTML = "";
+        
+                var isValid = true;
+        
+                // Check the file extension
+                if (!isValidImageType(image)) {
+                    document.getElementById("image-error").innerHTML = "Only JPEG (jpg, jpeg) or PNG images are allowed.";
+                    isValid = false;
+                }
+        
+                // ...
+            }
+        
+            function isValidImageType(filename) {
+                // Regular expression to check for allowed image extensions
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        
+                // Check if the filename matches the allowed extensions
+                return allowedExtensions.test(filename);
+            }
+        </script>
+        
+
+        <script>
+            $(document).ready(function() {
+              // Check if there are any messages in the Django messages framework
+              {% if messages %}
+                {% for message in messages %}
+                  // Display a toastr notification for each message
+                  toastr.success("{{ message }}", '', {
+                    positionClass: 'toast-top-center', // Set position to top center
+                    progressBar: true, // Display a progress bar
+                    closeButton: true, // Display a close button
+                    toastClass: 'custom-toast-class',
+                  });
+                {% endfor %}
+              {% endif %}
+            });
+          </script>
+          <div id="popup-message" class="alert alert-success" style="display: none;">
+            <strong></strong>
+        </div>
+        
+</html>
+
+    

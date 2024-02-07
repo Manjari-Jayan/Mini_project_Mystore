@@ -1,0 +1,99 @@
+{% include 'navigation.html' %}
+{% load static %}
+<link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+<style>
+
+
+  .sidebar-heading:hover::before{
+    
+    }
+.sidebar-heading:hover{
+transform:translateX(-20px);
+}
+
+.list-group-item:hover{
+  
+  transform:translateX(-20px);
+}
+
+</style>
+<div class="d-flex" id="wrapper" >
+  <div class="bg-dark border-right" id="sidebar-wrapper" style="background:black; color:white;">
+    <div class="sidebar-heading " style="margin-left:-1rem;">
+        Filter by category
+    </div>
+    <div class="list-group list-group-flush" >
+        <a href="{% url 'user_product' 0 %}" class="list-group-item list-group-item-action bg-dark" style="color:white; border-width:3px; margin-left: 0rem;">
+            All Product
+        </a>
+        {% for i in allcategory %}
+            <a href="{% url 'user_product' i.id %}" class="list-group-item list-group-item-action bg-dark" style="color:white; border-width:3px; margin-left: 0rem;" >
+                {{i.name}}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+ 
+    <div id="page-content-wrapper">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <button class="btn btn-primary" id="menu-toggle">
+<i class="fa fa-bars">
+</i>
+
+</button>
+        <h4 style="color:red;margin-left:30%">
+View {{category.name}} Product</h4>
+      </nav>
+      <div class="container mt-2">
+        <div class="row">
+            <div class="col-10">
+                <div class="product-carousel-container">
+                    <div class="product-carousel row">
+                        {% for j in product %}
+                        <div class="col-4 mb-3"> <!-- Adjust col-* as needed to control the number of products per row -->
+                            <div class="card" align="center" style="border: 1px solid lightgrey; width: 100%;">
+                                <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                    <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="max-height: 200px; max-width: 150px;" alt="card-img">
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        {{j.name}} || {{j.front_camera}}||{{j.back_camera}}
+                                    </h6>
+                                    <h6 class="card-title">
+                                         Rs.{{j.price}}
+                                    </h6>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/product-detail/{{j.id}}" class="text-white">
+                                            <button type="submit" class="btn btn-danger mr-2">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </a>
+                                        <a href="/add_to_comparison/{{j.id}}" class="text-white">
+                                            <button type="button" class="btn btn-primary mr-2 compare-button add-to-compare" data-product-id="{{ j.id }}" style="width: 36px; height: 32px;">
+                                                <i class="fa fa-exchange-alt"></i>
+                                            </button>
+                                        </a>
+                                        <form action="/wishlist/{{j.id}}/" method="post" class="like-form" id="">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success like-button {% if j.is_liked_by_user %}liked{% endif %}">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+ 
+<script>
+  $("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+  });
+</script>

@@ -1,0 +1,72 @@
+{% extends 'admin_base.html' %}
+{% block main %}
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add Category</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Category Name" required minlength="3" pattern="[A-Za-z\s]+" title="Category name must be at least 3 characters long and contain only letters and spaces."
+                                onfocus="clearMessages()">
+                            <div id="categoryError" class="text-danger"></div> <!-- Error message container -->
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary" onclick="return validateForm();">
+               
+                    {% if category_added_msg %}
+                    <div class="text-success">{{ category_added_msg }}</div>
+                    {% endif %}
+                    {% if category_exist_msg %}
+                    <div class="text-danger">{{ category_exist_msg }}</div>
+                    {% endif %}
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var categoryInput = document.getElementsByName('name')[0];
+        var categoryError = document.getElementById('categoryError');
+
+        // Reset error message
+        categoryError.textContent = '';
+
+        // Validate the category name using JavaScript
+        var categoryRegex = /^[A-Z][a-z]*(?:\s[A-Z][a-z]*)*$/; // Validation pattern
+
+        if (!categoryInput.value.trim()) {
+            categoryError.textContent = 'Category Name is required.';
+            return false;
+        }
+
+        if (!categoryRegex.test(categoryInput.value)) {
+            categoryError.textContent = 'Invalid category name format. Follow the rules: First letter capital, rest lowercase, first letter after spaces capital, no numbers.';
+            return false;
+        }
+
+        return true;
+    }
+
+    function clearMessages() {
+        var categoryError = document.getElementById('categoryError');
+        categoryError.textContent = ''; // Clear the error message
+        var successMessage = document.querySelector('.text-success');
+        if (successMessage) {
+            successMessage.textContent = ''; // Clear the success message
+        }
+        var errorMessage = document.querySelector('.text-danger');
+        if (errorMessage) {
+            errorMessage.textContent = ''; // Clear the error message
+        }
+    }
+</script>
+
+{% endblock %}

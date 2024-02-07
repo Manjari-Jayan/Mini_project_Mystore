@@ -1,0 +1,95 @@
+{% include 'navigation.html' %}
+{% block body %}
+{% load static custom_tags %}
+<head>
+    <title>My Wishlist</title>
+</head>
+
+
+ <style>  
+  
+</style>
+
+      <div class="container-fluid mt-2">
+          <div class="container-fluid">
+              <div class="row w-100 mx-auto">
+                {% comment %} <h1>My Wishlist</h1> {% endcomment %}
+
+                {% if wishlist_items %}
+                  <div class="container-fluid mt-2">
+                    <div class="container-fluid">
+                      <div class="row w-100 mx-auto">
+                        {% for item in wishlist_items %}
+                          <div class="col-md-3">
+                            <div class="card" align="center" style="border:1px solid lightgrey ">
+                              <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                              <img class="card-img-top img-thumbnail" src="{{ item.product.image.url }}" style="max-height: 200px; max-width: 150px; align-items: center;" alt="card-img">
+                              </div>
+                              <div class="card-body">
+                                <h6 class="card-title">
+                                  {{ item.product.name }} ||{{ item.product.front_camera }}||{{ item.product.back_camera }}||{{ item.product.processor }}
+                                  ||{{ item.product.ram }}||{{ item.product.rom }}
+                                </h6>
+                                <p class="card-text" style="font-size:14px">
+                                  {{ item.product.description }}
+                                </p>
+                                <p class="card-text" style="font-size:14px">
+                                Rs.{{ item.product.price }}</p>
+                                <div class="d-flex justify-content-center">
+                                  <a href="/add-to-cart/{{ item.product.id }}/" class="text-white">
+                                      <button type="submit" class="btn btn-primary btn-sm mr-2">
+                                          <i class="fa fa-shopping-cart"></i> Add to Cart
+                                      </button>
+                                  </a>
+                                  <a href="/product-detail/{{item.product.id}}/" id="i" class="text-white">
+                                    <button type="submit" class="btn btn-danger mr-2">
+                                        <i class="fa fa-eye" ></i>
+                                    </button>
+                                </a>
+                                  <a href="/remove_from_wishlist/{{item.product.id}}/" class="text-white">
+                                    <button type="submit" class="btn btn-danger btn-sm mr-2" style="font-size: 18.5px; padding: 5px 10px;">
+                                        <i class="fas fa-trash" style="font-size: 18.5px;"></i>
+                                    </button>
+                                </a>
+                              </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                <div id="emptyWishlistMessage"></div>
+                {% endif %}
+      
+      
+
+
+<script>
+    // Function to check if the wishlist is empty via AJAX
+    function checkEmptyWishlist() {
+        $.ajax({
+            url: "{% url 'check_empty_wishlist' %}",  // URL to your view that checks the wishlist status
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data.is_empty) {
+                    // Display the "Your wishlist is empty" message
+                    $("#emptyWishlistMessage").html("<p>Your wishlist is empty.</p>");
+                }
+            },
+        });
+    }
+
+    // Call the function to check empty wishlist status when the page loads
+    $(document).ready(function () {
+        checkEmptyWishlist();
+    });
+</script>
+
+
+{% endblock %}
+      
+
+

@@ -1,0 +1,144 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+{% comment %} <style>
+    img{
+        height:500px;
+    }
+    .carousel-caption {
+        background-color: rgba(0,0,0,0.5);
+    }
+</style>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    {% for i in data %}
+        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+          <img class="d-block w-100" src="{{i.image.url}}" alt="{{i.title}}">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>{{i.title}}</h5>
+            <p>{{i.description}}</p>
+          </div>
+        </div>
+    {% endfor %}
+
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+{% endblock %} {% endcomment %}
+
+
+ <style>  
+  .video-slider {
+    width: 100%;
+    overflow: hidden;
+}
+
+.video-slide {
+    display: none;
+}
+
+video {
+    width: 100%;
+}   
+</style>
+
+      <!-- Video Banner Slider -->
+      {% comment %} <div class="video-slider">
+          <div class="video-slide">
+              <video controls autoplay loop>
+                  <source src="\media\video1.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+              </video>
+          </div>
+          <div class="video-slide">
+              <video controls autoplay loop>
+                  <source src="video2.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+              </video>
+          </div> {% endcomment %}
+          <!-- Add more video slides as needed -->
+      </div>
+      
+      <div class="container-fluid mt-2">
+          <div class="container-fluid">
+              <div class="row w-100 mx-auto">
+                  {% for j in products %}
+                  <div class="col-md-3">
+                      <div class="card" align="center" style="border:1px solid lightgrey">
+                          <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%" alt="card-img">
+                          <div class="card-body">
+                              <h6 class="card-title">
+                                  {{j.name}} Rs.{{j.price}}
+                              </h6>
+                              <p class="card-text" style="font-size:14px">
+                                  {{j.description}}
+                              </p>
+      
+                              <div class="d-flex justify-content-center">
+                                <a href="/add-to-cart/{{j.id}}/" class="text-white">
+                                  <button type="submit" class="btn btn-primary mr-2">                                      
+                                          <i class="fa fa-shopping-cart"></i> 
+                                  </button>
+                                </a>
+                                  <a href="/product-detail/{{j.id}}/" class="text-white">
+                                  <button type="submit" class="btn btn-danger">                                      
+                                          <i class="fa fa-eye"></i>                                       
+                                  </button>
+                                </a>
+                                  <a href="/wishlist/{{j.id}}/" class="text-white">
+                                  <button type="submit" class="btn btn-success">                                   
+                                        <i class="fa fa-heart"></i>                                    
+                                </button>
+                              </a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  {% empty %}
+                  <div class="col-md-12">
+                      <div class="card">
+                          <div class="card-body">
+                              {% comment %} <img src="{% static 'images/empty.jpg' %}" /> {% endcomment %}
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+      
+      <!-- JavaScript/jQuery for Video Slider -->
+      <script>
+          $(document).ready(function() {
+              var currentSlide = 0;
+              var slides = $('.video-slide');
+      
+              // Function to show the next video slide
+              function showNextSlide() {
+                  slides.eq(currentSlide).fadeOut(1000);
+                  currentSlide = (currentSlide + 1) % slides.length;
+                  slides.eq(currentSlide).fadeIn(1000);
+              }
+      
+              // Start the slide show
+              showNextSlide();
+              setInterval(showNextSlide, 5000); // Change slide every 5 seconds (adjust as needed)
+          });
+      </script>
+
+
+{% endblock %}
+      

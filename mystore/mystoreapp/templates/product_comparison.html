@@ -1,0 +1,158 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+
+    
+<h3>Compared Products</h3>
+<div class="container-fluid mt-2">
+    <div class="container-fluid">
+        <div class="row w-100 mx-auto">
+            <div class="comparison-table-container">
+                <table class="table table-bordered">
+                    <thead></thead>
+                <tbody>
+
+                    <tr>
+                        <td><b>Image</b></td>
+                        {% for product in selectedProducts %}
+                        <td>
+                            <img src="{{ product.image.url }}" alt="Product Image" style="max-width: 150px; max-height: 200px;">
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr>
+                        <td><b>Name</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.name }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr>
+                        <td><b>Description</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.description }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Processor</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.processor }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Front Camera</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.front_camera }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>Back Camera</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.back_camera }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>RAM</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.ram }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><b>ROM</b></td>
+                        {% for product in selectedProducts %}
+                        <td>{{ product.rom }}</td>
+                        {% endfor %}
+                    </tr>  
+                    <tr >
+                        <td><b></b></td>
+                        {% for product in selectedProducts %}
+                        <td><a href="{% url 'remove_from_comparison' product.id %}" class="text-white remove-from-comparison">
+                            <button type="button" class="btn btn-danger btn-sm mr-2" style="font-size: 18.5px; padding: 5px 10px;">
+                                <i class="fas fa-trash" style="font-size: 18.5px;"></i> 
+                            </button>
+                        </a></td>
+                        {% endfor %}
+                    </tr>
+                    
+                        
+                        <!-- Add more table cells for additional product attributes -->
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+
+
+
+    {% comment %} <script>
+        // Function to parse query parameters
+        function getQueryParams() {
+            var params = {};
+            var queryString = window.location.search.substring(1);
+            var pairs = queryString.split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+                params[key] = value;
+            }
+            return params;
+        }
+    
+        // Get the selected product IDs from the query parameter
+        var queryParams = getQueryParams();
+        var selectedProducts = queryParams.products.split(',');
+    
+        // You can now use the selected product IDs to display the selected products for comparison
+        console.log('Selected Products for Comparison:', selectedProducts);
+    </script>
+
+<script>
+    $(document).ready(function () {
+        var comparedProducts = [];
+    
+        // Function to update the comparison list
+        function updateComparisonList() {
+            $("#comparison-list").empty();
+            for (var i = 0; i < comparedProducts.length; i++) {
+                $("#comparison-list").append("<li>" + comparedProducts[i] + "</li>");
+            }
+        }
+    
+        // Add to Compare button click event
+        $(".add-to-compare").click(function () {
+            var product = $(this).closest(".product");
+            var productId = product.data("id");
+            var productName = product.find("h2").text();
+    
+            if (comparedProducts.indexOf(productName) === -1) {
+                comparedProducts.push(productName);
+                updateComparisonList();
+            } else {
+                alert("Product is added to the comparison list.");
+            }
+        });
+    
+        // Remove from Comparison button click event (optional)
+        $("#comparison-list").on("click", "li", function () {
+            var productName = $(this).text();
+            var index = comparedProducts.indexOf(productName);
+            if (index !== -1) {
+                comparedProducts.splice(index, 1);
+                updateComparisonList();
+            }
+        });
+    });
+    
+</script>  {% endcomment %}
+

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Apple iPhone 12 Pro Max
+* source:	https://sketchfab.com/3d-models/apple-iphone-12-pro-max-ece656a8db114ddd90f6a9f6f27f7eb8
+* author:	SRT Performance™ (https://sketchfab.com/SRTPerformance)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Apple iPhone 12 Pro Max" (https://sketchfab.com/3d-models/apple-iphone-12-pro-max-ece656a8db114ddd90f6a9f6f27f7eb8) by SRT Performance™ (https://sketchfab.com/SRTPerformance) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)

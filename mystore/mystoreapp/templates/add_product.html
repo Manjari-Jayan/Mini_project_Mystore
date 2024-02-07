@@ -1,0 +1,171 @@
+{% extends 'admin_base.html' %}
+{% block main %}
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add Product</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+                {% csrf_token %}
+                <div class="form-row">
+                  <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Category</label>
+                            <select name="category" class="form-control" required>
+                                <option value="">Choose Category</option>
+                                {% for i in category %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Subcategory</label>
+                            <select name="brand" class="form-control" required>
+                                <option value="">Choose Subcategory</option>
+                                {% for i in brand %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Series</label>
+                            <select name="series" class="form-control" required>
+                                <option value="">Choose Series</option>
+                                {% for i in series %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Category Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Price</label>
+                            <input type="text" name="price" class="form-control" placeholder="Product Price" id="priceInput">
+                            <small id="priceHelp" class="form-text text-danger"></small>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Discount</label>
+                            <input type="text" name="discount" class="form-control" placeholder="Apply Discount" id="discountInput">
+                            <small id="discountHelp" class="form-text text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Stock</label>
+                            <input type="text" name="stock" class="form-control" placeholder="Enter stock">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Image</label>
+                            <input type="file" name="image" class="form-control" id="imageInput">
+                            <small id="imageHelp" class="form-text text-danger"></small>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="desc" class="form-control" placeholder="write description here"></textarea>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Processor</label>
+                            <textarea name="processor" class="form-control" placeholder="Processor"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>front camera</label>
+                            <textarea name="front_camera" class="form-control" placeholder="Front camera"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Back Camera</label>
+                            <textarea name="back_camera" class="form-control" placeholder="Back Camera"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>RAM</label>
+                            <textarea name="ram" class="form-control" placeholder="RAM"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Rom</label>
+                            <textarea name="rom" class="form-control" placeholder="Rom"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function validateForm() {
+        var imageInput = document.getElementById('imageInput');
+        var priceInput = document.getElementById('priceInput');
+        var discountInput = document.getElementById('discountInput');
+
+        var imageValue = imageInput.value.toLowerCase();
+        var priceValue = priceInput.value;
+        var discountValue = discountInput.value;
+
+        var imageRegex = /\.(jpg|jpeg|png)$/;
+        var priceRegex = /^\d+$/;
+
+        var isValid = true;
+
+        // Image Format Validation
+        if (!imageRegex.test(imageValue)) {
+            document.getElementById('imageHelp').textContent = 'Image must be in JPG, JPEG, or PNG format.';
+            isValid = false;
+        } else {
+            document.getElementById('imageHelp').textContent = '';
+        }
+
+        // Price Validation
+        if (!priceRegex.test(priceValue) || priceValue <= 0) {
+            document.getElementById('priceHelp').textContent = 'Price must be a positive integer.';
+            isValid = false;
+        } else {
+            document.getElementById('priceHelp').textContent = '';
+        }
+
+        // Discount Validation
+        {% comment %} if (discountValue > priceValue) {
+            document.getElementById('discountHelp').textContent = 'Discount cannot exceed the product price.';
+            isValid = false;
+        } else {
+            document.getElementById('discountHelp').textContent = '';
+        }
+
+        return isValid; {% endcomment %}
+    }
+</script>
+{% endblock %}

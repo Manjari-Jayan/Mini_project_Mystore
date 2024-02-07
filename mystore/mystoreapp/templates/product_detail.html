@@ -1,0 +1,263 @@
+{% load static custom_tags %}
+<html>
+<head>
+    <title>Product Detail</title>
+    <link href="{% static 'css/product-detail.css' %}" rel="stylesheet"/>
+    <link href="https://w3learnpoint.com/cdn/jquery-picZoomer.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" rel="stylesheet"/>
+</head>
+<style>
+   .btn-custom {
+      background-color: #fe0000; /* Change this to your desired color */
+      color: #fff; /* Text color for contrast */
+  }
+
+  
+
+  
+</style>
+<body>
+{% include 'navigation.html' %}
+
+<section id="services" class="services section-bg">
+    <div class="container">
+      <div class="col-sm-12 text-center mb-4 title_bx">
+        <h3 class="title"><span class="header-title-1">Product Detail</span>
+            {% comment %} <span class="header-title-1">Detail</span></h3> {% endcomment %}
+      </div>
+       <div class="row row-sm">
+          <div class="col-md-6 _boxzoom" id="container3D">
+             {% comment %} <div class="zoom-thumb">
+                <ul class="piclist">
+                   <li><img src="https://s.fotorama.io/3.jpg" alt=""></li>
+                   <li><img src="https://s.fotorama.io/3.jpg" alt=""></li>
+                   <li><img src="https://s.fotorama.io/3.jpg" alt=""></li>
+                   <li><img src="https://ucarecdn.com/382a5139-6712-4418-b25e-cc8ba69ab07f/-/stretch/off/-/resize/760x/" alt=""></li>
+                </ul>
+             </div> {% endcomment %}
+             <div class="_product-images">
+                <div class="picZoomer">
+                   <img class="my_img" src="{{product.image.url}}" alt=" images">
+                </div>
+             </div>
+          </div>
+         
+         <div class="col-md-6">
+             <div class="_product-detail-content">
+                
+                <p class="_p-name product-name">{{product.name}} </p>
+                <div class="_p-price-box">
+                  
+                    <div class="p-list">
+                        <span> M.R.P. : <i class="fa fa-inr"></i> <del>{{ product.price }}</del> </span>
+                        <span class="price"> Rs. {{ product.id | applydiscount }} </span>
+                    </div>
+                    
+                   <div class="_p-add-cart">
+                    <form action="{% url 'product_detail' product.id %}" method="post">
+                        {% csrf_token %}
+                     {% comment %} <div class="_p-qty">
+                         <span>Add Quantity</span>
+                         <div class="value-button decrease_" id="decrease" value="Decrease Value">-</div>
+                         <input type="number" name="qty" id="number" value="1" />
+                         <div class="value-button increase_" id="increase" value="Increase Value">+</div>
+                     </div> {% endcomment %}
+                 </div>
+                 
+                   <div class="_p-features">
+                      <span> Description About this product:- </span>
+                      {{product.description}}                    
+                   </div>
+                   <div class="_p-features">
+                    <p> <b>Processor:</b> {{product.processor}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Front Camera:</b> {{product.front_camera}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Back Camera:</b> {{product.back_camera}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Ram:</b> {{product.ram}}</p>                  
+                 </div>
+                 <div class="_p-features">
+                    <p> <b>Rom:</b> {{product.rom}}</p>                  
+                 </div>
+                   <div class="_p-qty">
+                    <span> Stock left:</span>
+                    {{product.stock}}                    
+                 </div>
+               
+                   {% comment %} <form action="" method="post" accept-charset="utf-8">
+                     {% csrf_token %} {% endcomment %}
+                     <ul class="spe_ul"></ul>
+                     <div class="_p-qty-and-cart">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
+                            <button class="btn-theme btn btn-custom text-white ml-2 buy-btn" tabindex="0">
+                                <i class="fa fa-shopping-cart"></i> Buy Now
+                            </button>
+                        </form>
+                            <a href="/add-to-cart/{{product.id}}/" class="btn-theme btn btn-primary text-white ml-2" tabindex="0">
+                                <i class="fa fa-shopping-cart" id="c"></i> Add to cart
+                            </a>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            
+                            <a href="{% url 'add_to_comparison' product.id %}" class="btn btn-dark compare-button add-to-compare" data-product-id="{{ product.id }}">
+                                <i class="fa fa-exchange-alt" ></i> Compare
+                            </a>
+                            
+
+
+                            <form action="/wishlist/{{product.id}}/" method="post" class="like-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success like-button {% if product.is_liked_by_user %}liked{% endif %}">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+                       
+                       
+                        <!-- Wishlist icon -->
+                        <input type="hidden" name="pid" value="18" />
+                        <input type="hidden" name="price" value="850" />
+                        <input type="hidden" name="url" value="" />
+                    </div>
+                    
+                 {% comment %} </form> {% endcomment %}
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+</section>
+<section class="sec bg-light">
+    <div class="container">
+       <div class="row">
+          <div class="col-sm-12 title_bx">
+             <h3 class="title"> <span class="header-title-1">Recent Post</span>
+                {% comment %} <span class="header-title-2">Post</span> {% endcomment %}
+            </h3>
+          </div>
+       </div>
+       <div class="row">
+          <div class="col-md-12 list-slider mt-4">
+             <div class="owl-carousel common_wd  owl-theme" id="recent_post">
+                 {% for i in latest_product %}
+                <div class="item">
+                   <div class="sq_box shadow">
+                      <div class="pdis_img">
+                         <span class="wishlist">
+                         <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+                         </span>
+                         <a href="#">
+                         <img src="{{i.image.url}}">
+                         </a>
+                      </div>
+                      <h4 class="mb-1"> <a href="details.php"> {{i.name}} </a> </h4>
+                      <div class="price-box mb-2">
+                         <span class="price"> Price <i class="fa fa-inr"></i> {{i.price}} </span>
+                         <span class="offer-price"> Offer Price <i class="fa fa-inr"></i> {{i.id|applydiscount}} </span>
+                      </div>
+                      <div class="btn-box text-center">
+                        <a href="/add-to-cart/{{product.id}}/" class="btn-theme btn btn-success" tabindex="0">
+                            <i class="fa fa-shopping-cart"></i> Add to Cart
+                          </a> 
+                       </div>
+                       <!-- Add this code where you want to display the product comparison icon -->                                     
+                   </div>
+                </div>
+                {% endfor %}
+             </div>
+          </div>
+       </div>
+    </div>
+</section>
+<script>
+    {% for message in messages %}
+        alert("{{ message }}");
+    {% endfor %}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
+<script src="{% static 'js/product-detal.js' %}"></script>
+<script type="module" src="{% static 'js/three.js' %}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+   const decreaseButton = document.getElementById("decrease");
+   const increaseButton = document.getElementById("increase");
+   const quantityInput = document.getElementById("number");
+
+   decreaseButton.addEventListener("click", function () {
+       let currentQuantity = parseInt(quantityInput.value);
+       if (currentQuantity > 1) {
+           currentQuantity--;
+           quantityInput.value = currentQuantity;
+       }
+   });
+
+   increaseButton.addEventListener("click", function () {
+       let currentQuantity = parseInt(quantityInput.value);
+       currentQuantity++;
+       quantityInput.value = currentQuantity;
+   });
+
+   quantityInput.addEventListener("input", function () {
+       let currentQuantity = parseInt(quantityInput.value);
+       if (isNaN(currentQuantity) || currentQuantity < 1) {
+           quantityInput.value = 1;
+       }
+   });
+});
+</script>
+
+<script>
+@login_required
+   $(document).ready(function () {
+       $('.like-form').on('submit', function (e) {
+           e.preventDefault();
+           console.log("Hello")
+           var form = $(this);
+           var likeButton = form.find('.like-button');
+           var heartIcon = likeButton.find('.fa-heart');
+           var productId = likeButton.data('product-id');
+           var productName = likeButton.data('product-name');
+           var message = '';
+   
+           $.ajax({
+               url: form.attr('action'),
+               type: form.attr('method'),
+               data: form.serialize(),
+               success: function () {
+                   if (heartIcon.hasClass('liked')) {
+                       heartIcon.removeClass('liked');
+                       likeButton.removeClass('btn-danger'); // Remove the red color class
+                       likeButton.addClass('btn-success'); // Add the green color class
+                       //message = productName + ' removed from your wishlist.';
+                       message = 'product removed from your wishlist.';
+                   } else {
+                       heartIcon.addClass('liked');
+                       likeButton.removeClass('btn-success'); // Remove the green color class
+                       likeButton.addClass('btn-danger'); // Add the red color class
+                       //message = productName + ' added to your wishlist.';
+                       message = 'product added to your wishlist.';
+                   }
+   
+                   // Display the message as a browser alert
+                   alert(message);
+               }
+           });
+       });
+   });
+   
+</script> 
+
+
+
+
+
+      
+ 

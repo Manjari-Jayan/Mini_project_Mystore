@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com-->
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Responsive Login and Signup Form </title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="static/css/style.css">
+                
+        <!-- Boxicons CSS -->
+        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>             
+    </head>
+    <body>
+      <script>
+        $(document).ready(function () {
+    //    $("#full_name").keyup(function () {
+    //      validateName("#full_name");
+    //     });
+    
+        $("#email").keyup(function () {
+          validateEmail("#email");
+        });
+    
+    
+    //    $("#contact").keyup(function () {
+    //      validateContact("#contact");
+    //    });
+        $("#password").keyup(function () {
+         validatePassword("#password");
+        });
+      
+          $("#confirm_password").keyup(function () {
+          validateConfirmPassword("#confirm_password");
+       });
+    });
+    
+    // function validateName(fieldId) {
+    //     var name = $(fieldId).val();
+    //     lettersWithSpaces = /^[A-Za-z\s]+$/;
+    //     if (name.trim() === "") {
+    //       $("#fnspan").html("Enter your name").css("color", "red");
+    //     } else if (!lettersWithSpaces.test(name)) {
+    //        $("#fnspan").html("only alphabets are allowed").css("color", "red");
+    //     } else {
+    //        $("#fnspan").html("");
+    //   }
+    // }
+    
+    function validateEmail(fieldId) {
+        var email = $(fieldId).val();
+        var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+       if (email === "") {
+         $("#emspan").html("Enter your Email Id").css("color", "red");
+        } else if (!filter.test(email)) {
+         $("#emspan").html("Incorrect Email Id").css("color", "red");
+        } else {
+          $("#emspan").html("");
+      }
+    }
+    
+    // function validateContact(fieldId) {
+    //     var contact = $(fieldId).val();
+    //     var chck = /^[0-9]{10}$/;
+    //     if (contact === "") {
+    //        $("#cspan").html("Enter only Digits").css("color", "red");
+    //     } else if (!chck.test(contact)) {
+    //       $("#cspan").html("Incorrect Contact Number").css("color", "red");
+    //    } else {
+    //      $("#cspan").html("");
+    //  }
+    // }
+    
+    // function validatePassword(fieldId) {
+    //     var password = $(fieldId).val();
+    
+    //     if (password === "") {
+    //         $("#pspan").html("Enter your password").css("color", "red");
+    //     } else {
+    //         $("#pspan").html("");
+    //     }
+    // }
+    function validatePassword(fieldId) {
+        var password = $(fieldId).val();
+        var pwd_expression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/;
+        if (password === "") {
+           $("#pspan").html("Enter your password").css("color", "red");
+        }
+         else if(!pwd_expression.test(password))
+        {
+         $("#pspan").html("Use correct Password Format").css("color", "red");
+    
+         }
+        else {
+       $("#pspan").html("");
+        }
+        }
+    
+    function validateConfirmPassword(fieldId) {
+        var password = $(fieldId).val();
+        var confirmPassword = $(fieldId).val();
+        if (confirm_password === "") {
+            $("#cpspan").html("Enter your password").css("color", "red");
+        }
+        else if (password !== confirmPassword) {
+            $("#cpspan").html("Password not match").css("color", "red");
+            // cpspan.textContent = "Passwords do not match";
+             return false;
+        } else {
+            $("#cpspan").html("");
+       }
+    }
+    //    function validateConfirmPassword(fieldId) {
+    //     var password = $("#pass").val();
+    //    var confirmPassword = $(fieldId).val();
+    //     if (confirmPassword === "") {
+    //    $("#cpspan").html("Enter the password").css("color", "red");
+    //    } else if (confirmPassword !== password) {
+    //    $("#cpspan").html("Passwords do not match").css("color", "red");
+    //    } else {
+    //    $("#cpspan").html("");
+    //    }
+    //    }
+      </script>
+        <section class="container forms">
+            <div class="form login">
+                <div class="form-content">
+                    <form action="#">
+                    <header>Login</header>
+                   
+                        <div class="field input-field">
+                            <input id="email" type="email" placeholder="Email" class="input">
+                        </div>
+
+                        <div class="field input-field">
+                            <input id="password" type="password" placeholder="Password" class="password">
+                            <i class='bx bx-hide eye-icon'></i>
+                        </div>
+
+                        <div class="form-link">
+                            <a href="#" class="forgot-pass">Forgot password?</a>
+                        </div>
+
+                        <div class="field button-field">
+                            <button>Login</button>
+                        </div>
+                    </form>
+
+                    <div class="form-link">
+                        <span>Don't have an account? <a href="#signup1" class="link signup-link">Signup</a></span>
+                    </div>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="media-options">
+                    <a href="#" class="field facebook">
+                        <i class='bx bxl-facebook facebook-icon'></i>
+                        <span>Login with Facebook</span>
+                    </a>
+                </div>
+
+                <div class="media-options">
+                    <a href="#" class="field google">
+                        <img src="images/google.png" alt="" class="google-img">
+                        <span>Login with Google</span>
+                    </a>
+                </div>
+
+            </div>
+
+           
+           
+        </section>
+
+        
+    </body>
+</html>

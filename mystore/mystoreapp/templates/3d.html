@@ -1,0 +1,46 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+<h6> commented</h6> 
+<style>
+    body {
+        margin: 0;
+        font-family: "Montserrat", sans-serif;
+        {% comment %} background-color: #000; {% endcomment %}
+      }
+      
+      header {
+        margin-top: 3em;
+        text-align: center;
+        color: white;
+      }
+      
+      header h1 {
+        font-size: 2em;
+        font-weight: 900;
+      }
+      
+      #container3D canvas {
+        {% comment %} width: 100vw !important;
+        height: 100vh !important;
+        position: absolute; {% endcomment %}
+        top: 0;
+        left: 0;
+      }
+      #container3D {
+        width: 100%; /* Set the width to 100% of the parent container */
+        height: 500px; /* Set the height as desired */
+        position: relative; /* Ensure the container is positioned */
+    }
+    
+</style>
+<div id="container3D">
+
+</div>
+      
+      <script type="module" src="{% static 'js/three.js' %}"></script>
+      
+      
+{% endblock %}
+      
+      
