@@ -78,5 +78,49 @@
     </div>
   </main>
 </body>
+<script>
 
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const cardHolder = document.querySelector('input[name="holder_name"]').value.trim();
+        const cardNumber = document.querySelector('input[name="number"]').value.trim();
+        const expiry = document.querySelector('input[name="expiry"]').value.trim();
+        const cvc = document.querySelector('input[name="cvc"]').value.trim();
+
+        // Card holder name validation
+        if (cardHolder === '') {
+            alert('Please enter the card holder name.');
+            return;
+        }
+
+        // Card number validation
+        const cardNumberRegex = /^[0-9]{16}$/;
+        if (!cardNumberRegex.test(cardNumber)) {
+            alert('Please enter a valid 16-digit card number.');
+            return;
+        }
+
+        // Expiry date validation
+        const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        if (!expiryRegex.test(expiry)) {
+            alert('Please enter a valid expiry date in MM/YY format.');
+            return;
+        }
+
+        // CVC validation
+        const cvcRegex = /^[0-9]{3}$/;
+        if (!cvcRegex.test(cvc)) {
+            alert('Please enter a valid 3-digit CVC number.');
+            return;
+        }
+
+        // If all validations pass, submit the form
+        form.submit();
+    });
+})
+</script>
 </html>
