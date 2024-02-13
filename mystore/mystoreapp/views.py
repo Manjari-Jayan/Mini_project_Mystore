@@ -1380,6 +1380,7 @@ def deliverylogin(request):
 
 
 
+
 @login_required
 def deliverydetails(request):
     if request.method == 'POST':
