@@ -1374,6 +1374,21 @@ def deliverylogin(request):
     return render(request, 'deliverylogin.html')  # Update the template name
 
 
+@login_required
+def deliverydetails(request):
+    if request.method == 'POST':
+        availability = request.POST.get('availability', None)
+
+        if availability in ['available', 'not_available']:
+            request.user.delivery_agent.availability = availability
+            request.user.delivery_agent.save()
+            messages.success(request, 'Availability status updated successfully.')
+        else:
+            messages.error(request, 'Invalid availability status.')
+
+        return redirect('deliverydetails')
+
+    return render(request, 'deliverydetails.html')
 
 
 
