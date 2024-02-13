@@ -1293,6 +1293,8 @@ from django.contrib.auth.models import User  # Import the User model
 from .models import DeliveryAgent
 
 
+
+
 from mystoreapp.models import User, DeliveryAgent
 
 def regdelivery(request):
@@ -1372,6 +1374,10 @@ def deliverylogin(request):
             messages.error(request, 'Invalid login or account not approved.')
 
     return render(request, 'deliverylogin.html')  # Update the template name
+
+
+
+
 
 
 @login_required
