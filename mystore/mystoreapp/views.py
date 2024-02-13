@@ -952,7 +952,8 @@ def userlogin(request):
             elif user.is_staff:
                 login(request, user)
                 messages.success(request, "Delivery Agent login successful")
-                return redirect('delivery_agent')
+                # return redirect('delivery_agent')
+                return redirect('deliverydetails')
             else:
                 login(request, user)
                 return redirect('home')
@@ -1287,42 +1288,90 @@ def read_feedback(request, pid):
     feedback.save()
     return HttpResponse(json.dumps({'id':1, 'status':'success'}), content_type="application/json")
 #-------------------------------------------Delivery Agent--------------------------------------------
-# def regdelivery(request):
-#     if request.method == 'POST':
-#         # Retrieve data from the form
-#         name = request.POST.get('name')
-#         username = request.POST.get('username')
-#         email = request.POST.get('email')
-#         phone = request.POST.get('phone')
-#         license_number = request.POST.get('license')
-#         vechicle_type = request.POST.get('vechicle_type')
-#         location = request.POST.get('location')
-#         password = request.POST.get('password')
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User  # Import the User model
+from .models import DeliveryAgent
 
-#         # Use the custom manager to create a new user
-#         user = User.objects.create_user(
-#             username=username,
-#             email=email,
-#             password=password,
-#         )
 
-#         # Create a new DeliveryAgent instance with 'pending' status
-#         delivery_agent = DeliveryAgent.objects.create(
-#             user=user,  # Associate the DeliveryAgent with the user
-#             name=name,
-#             username=username,
-#             email=email,
-#             phone=phone,
-#             license_number=license_number,
-#             vechicle_type=vechicle_type,
-#             location=location,
-#             status='pending',  # Set the status to 'pending'
-#         )
+from mystoreapp.models import User, DeliveryAgent
 
-#         # Redirect to a success page or do other actions as needed
-#         return redirect('login')
+def regdelivery(request):
+    if request.method == 'POST':
+        # Retrieve data from the form
+        name = request.POST.get('name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        license_number = request.POST.get('license')
+        vehicle_type = request.POST.get('vehicle_type')
+        location = request.POST.get('location')
+        password = request.POST.get('password')
 
-#     return render(request, 'regdelivery.html')
+        # Use the custom manager to create a new user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+
+        # Create a new DeliveryAgent instance with 'pending' status
+        delivery_agent = DeliveryAgent.objects.create(
+            user=user,  # Associate the DeliveryAgent with the user
+            name=name,
+            username=username,
+            email=email,
+            phone=phone,
+            license_number=license_number,
+            vechicle_type=vehicle_type,
+            location=location,
+            status='pending',  # Set the status to 'pending'
+        )
+
+        # Redirect to a success page or do other actions as needed
+        return redirect('deliverylogin')
+
+    return render(request, 'regdelivery.html')
+
+
+def deliveryagent(request):
+    delivery_agents = DeliveryAgent.objects.all()
+    return render(request, 'deliveryagent.html', {'delivery_agents': delivery_agents})
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import DeliveryAgent
+from django.views.decorators.http import require_POST  # Import require_POST decorator
+
+@require_POST
+def approve_delivery_agent(request, agent_id):
+    delivery_agent = get_object_or_404(DeliveryAgent, id=agent_id)
+    delivery_agent.status = 'approved'
+    delivery_agent.save()
+    return redirect('deliveryagent')  # Redirect to a success page
+
+
+@require_POST
+def reject_delivery_agent(request, agent_id):
+    delivery_agent = get_object_or_404(DeliveryAgent, id=agent_id)
+    delivery_agent.status = 'rejected'
+    delivery_agent.save()
+    return redirect('deliveryagent') 
+
+def deliverylogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.delivery_agent.is_approved():
+            # Login the user
+            login(request, user)
+            return redirect('deliverydetails')  # Redirect to the delivery agent dashboard
+        else:
+            messages.error(request, 'Invalid login or account not approved.')
+
+    return render(request, 'deliverylogin.html')  # Update the template name
 
 
 
@@ -1357,8 +1406,8 @@ def admin_dashboard(request):
 #-------------------------------------------------------DELIVERY AGENT--------------------------
 
 
-from django.core.mail import send_mail
-from .models import DeliveryAgent
+# from django.core.mail import send_mail
+# from .models import DeliveryAgent
 
 
 # @login_required
@@ -1401,64 +1450,71 @@ from .models import DeliveryAgent
 #         return redirect('view_da')
 
 #     return render(request, 'add_staff.html')
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from .models import DeliveryAgent  # Import your DeliveryAgent model
 
-@login_required
-def add_da(request):
-    if request.method == 'POST':
-        # Extract form data
-        agent_name = request.POST.get('agent_name')
-        place = request.POST.get('place')
-        mobile = request.POST.get('mobile')  # Using consistent variable name
-        pincode = request.POST.get('pincode')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+
+
+
+#---------------------------------------------final code commented to do approval or reject----------
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+# from django.core.mail import send_mail
+# from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.models import User
+# from .models import DeliveryAgent  # Import your DeliveryAgent model
+
+# @login_required
+# def add_da(request):
+#     if request.method == 'POST':
+#         # Extract form data
+#         agent_name = request.POST.get('agent_name')
+#         place = request.POST.get('place')
+#         mobile = request.POST.get('mobile')  # Using consistent variable name
+#         pincode = request.POST.get('pincode')
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
         
-        try:
-            # Check if user with provided email already exists
-            existing_user = User.objects.get(email=email)
-            # User already exists, handle this case (e.g., display error message)
-            messages.error(request, 'User with this email already exists')
-            return redirect('view_da')  # Assuming 'view_da' is the URL name for viewing delivery agents
-        except User.DoesNotExist:
-            # User does not exist, proceed with creating new user
-            pass
+#         try:
+#             # Check if user with provided email already exists
+#             existing_user = User.objects.get(email=email)
+#             # User already exists, handle this case (e.g., display error message)
+#             messages.error(request, 'User with this email already exists')
+#             return redirect('view_da')  # Assuming 'view_da' is the URL name for viewing delivery agents
+#         except User.DoesNotExist:
+#             # User does not exist, proceed with creating new user
+#             pass
         
-        # Create user
-        user = User.objects.create_user(username=email, email=email, password=password)
-        user.first_name = agent_name
-        user.is_staff = True
-        user.save()
+#         # Create user
+#         user = User.objects.create_user(username=email, email=email, password=password)
+#         user.first_name = agent_name
+#         user.is_staff = True
+#         user.save()
 
-        # Create delivery agent
-        delivery_agent = DeliveryAgent.objects.create(
-            user=user,
-            place=place,
-            mobile=mobile,  # Using consistent variable name
-            pincode=pincode,
-            location=place,  # Is this correct? You're assigning place to both place and location
-        )
+#         # Create delivery agent
+#         delivery_agent = DeliveryAgent.objects.create(
+#             user=user,
+#             place=place,
+#             mobile=mobile,  # Using consistent variable name
+#             pincode=pincode,
+#             location=place,  # Is this correct? You're assigning place to both place and location
+#         )
 
-        # Send email notification
-        subject = 'Welcome to TechTrove Delivery Team'
-        message = f'Hi {agent_name},\n\nYou have been added as a delivery agent on TechTrove.\n\nYour login credentials:\nEmail: {email}\nPassword: {password}\n\nThank you for joining our team!'
-        from_email = 'mailforgranted@gmail.com'  # Replace with your email
-        recipient_list = [email]
+#         # Send email notification
+#         subject = 'Welcome to TechTrove Delivery Team'
+#         message = f'Hi {agent_name},\n\nYou have been added as a delivery agent on TechTrove.\n\nYour login credentials:\nEmail: {email}\nPassword: {password}\n\nThank you for joining our team!'
+#         from_email = 'mailforgranted@gmail.com'  # Replace with your email
+#         recipient_list = [email]
 
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+#         send_mail(subject, message, from_email, recipient_list, fail_silently=False)
         
-        # Display success message and redirect
-        messages.success(request, 'Agent Added Successfully')
-        return redirect('view_da')  # Assuming 'view_da' is the URL name for viewing delivery agents
+#         # Display success message and redirect
+#         messages.success(request, 'Agent Added Successfully')
+#         return redirect('view_da')  # Assuming 'view_da' is the URL name for viewing delivery agents
 
-    return render(request, 'add_staff.html')  # Assuming 'add_staff.html' is the template for adding a delivery agent
+#     return render(request, 'add_staff.html')  # Assuming 'add_staff.html' is the template for adding a delivery agent
 
 
+
+#----------------------------------------------------------above code is the  final one ----
 # def add_da(request):
 #     if request.method == 'POST':
 #         # Extract form data
@@ -1506,11 +1562,11 @@ def add_da(request):
 #     return render(request, 'add_staff.html')
 
 
-def view_da(request):
+# def view_da(request):
     
-    delivery_agents = DeliveryAgent.objects.all()
+#     delivery_agents = DeliveryAgent.objects.all()
     
-    context = {
-        'delivery_agents': delivery_agents,
-    }
-    return render(request, 'delivery_agent_list.html', context)
+#     context = {
+#         'delivery_agents': delivery_agents,
+#     }
+#     return render(request, 'delivery_agent_list.html', context)

@@ -184,45 +184,60 @@ class Booking(models.Model):
 
 
 
-# class DeliveryAgent(models.Model):
-#         STATUS_CHOICES = [
-#             ('pending', 'Pending'),
-#             ('approved', 'Approved'),
-#             ('rejected', 'Rejected'),
-#         ]
-        
-#         user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='delivery_agent')
-#         name = models.CharField(max_length=255)
-#         username = models.CharField(max_length=30, unique=True)  # Added username field
-#         email = models.EmailField()
-#         phone = models.CharField(max_length=15)
-#         place = models.CharField(max_length=100)  # Example field
-#         pincode = models.CharField(max_length=10)  # Example field
-#         location = models.CharField(max_length=100)
-#         license_number = models.CharField(max_length=20)
-#         vechicle_type = models.CharField(max_length=255,default=1)
-#         location = models.CharField(max_length=255)
-#         password = models.CharField(max_length=255)
-#         status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
-
-#         def str(self):
-#             return self.name
-    
 
 class DeliveryAgent(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    place = models.CharField(max_length=100, blank=True, null=True)
-    pincode = models.CharField(max_length=10, blank=True, null=True)
-    location = models.CharField(max_length=100, blank=True, null=True)
-    # assigned_seller = models.ForeignKey(Seller, on_delete=models.CASCADE, null=True, blank=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    distance = models.FloatField(null=True, blank=True)
-    is_available = models.BooleanField(default=True)
-    mobile = models.CharField(max_length=100, null=True, blank=True)
-    # assigned_route = models.ForeignKey(Route, null=True, blank=True, on_delete=models.SET_NULL)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+    
+    AVAILABILITY_CHOICES = [
+        ('available', 'Available'),
+        ('not_available', 'Not Available'),
+    ]
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='delivery_agent')
+    name = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    username = models.CharField(max_length=30, default=None, blank=True, null=True)  # Added username field
+    # email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15, default=None, blank=True, null=True)
+    # license_number = models.CharField(max_length=20,unique=True)
+    license_number = models.CharField(max_length=20, unique=True, default=None, blank=True, null=True)
+
+    vechicle_type = models.CharField(max_length=255,default=1)
+    location = models.CharField(max_length=255, default=None, blank=True, null=True)
+    password = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    availability = models.CharField(max_length=15, choices=AVAILABILITY_CHOICES, default='not_available')
+    email = models.EmailField(unique=True, default="manjarijayan2024@gmail.com")
+
+
+
     def __str__(self):
-        return self.user.email
+        return self.name
+    
+    def is_approved(self):
+        return self.status == 'approved'
+
+    
+
+# class DeliveryAgent(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     place = models.CharField(max_length=100, blank=True, null=True)
+#     pincode = models.CharField(max_length=10, blank=True, null=True)
+#     location = models.CharField(max_length=100, blank=True, null=True)
+#     # assigned_seller = models.ForeignKey(Seller, on_delete=models.CASCADE, null=True, blank=True)
+#     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+#     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+#     distance = models.FloatField(null=True, blank=True)
+#     is_available = models.BooleanField(default=True)
+#     mobile = models.CharField(max_length=100, null=True, blank=True)
+#     # assigned_route = models.ForeignKey(Route, null=True, blank=True, on_delete=models.SET_NULL)
+#     def __str__(self):
+#         return self.user.email
 
 
 STATUS = ((1, "Read"), (2, "Unread"))
