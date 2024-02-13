@@ -84,12 +84,19 @@ urlpatterns = [
     path('delivery_agent/', delivery_agent, name='delivery_agent'),
     
 
-    path('add_da/', add_da, name='add_da'),
-    path('view_da/', view_da, name='view_da'),
-
-
-
-    # path('regdelivery', regdelivery, name="regdelivery"),
+    # path('add_da/', add_da, name='add_da'),
+    # path('view_da/', view_da, name='view_da'),
+    path('admin-order-track/<int:pid>/', admin_order_track, name="admin_order_track"),
+    path('user-feedback/', user_feedback, name="user_feedback"),
+    path('manage-feedback/', manage_feedback, name="manage_feedback"),
+    path('delete-feedback/<int:pid>/', delete_feedback, name="delete_feedback"),
+    path('feedback-read/<int:pid>/', read_feedback, name="read_feedback"),
+    path('regdelivery', regdelivery, name="regdelivery"),
+    path('deliveryagent', deliveryagent, name="deliveryagent"),
+    path('approve_delivery_agent/<int:agent_id>/', approve_delivery_agent, name='approve_delivery_agent'),
+    path('reject_delivery_agent/<int:agent_id>/', reject_delivery_agent, name='reject_delivery_agent'),
+    path('deliverylogin', deliverylogin, name="deliverylogin"),
+    path('deliverydetails', deliverydetails, name="deliverydetails"),
     # path('checkout/', checkout, name='checkout'),
     # path('add_delivery_agent/', add_delivery_agent, name='add_delivery_agent'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
